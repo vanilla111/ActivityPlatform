@@ -22,7 +22,7 @@ class ApplyDataController extends Controller
     {
         $this->middleware('data.actkey')->only(['index', 'sendSMS']);
         $this->middleware('data.enrollid')->only(['show', 'update', 'destroy']);
-        $this->middleware('data.flowid')->only(['store', 'update']);
+        $this->middleware('data.flowid')->only(['store', 'update', 'operation', 'isSendSmsAndUpgrade']);
         $this->middleware('data.base')->only(['index', 'store', 'show', 'update', 'destroy']);
         $this->middleware('data.index')->only(['index']);
         $this->middleware('data.store')->only(['store']);
@@ -38,14 +38,15 @@ class ApplyDataController extends Controller
      */
     public function index(Request $request)
     {
-        $allow = ['page', 'per_page', 'sortby', 'sort', 'act_key', 'flow_id', 'college', 'gender', 'name', 'stu_code'];
+        $allow = ['page', 'per_page', 'sortby', 'sort', 'act_key', 'flow_id', 'college', 'gender', 'name', 'stu_code', 'was_send_sms'];
         $info = $request->only($allow);
 
         //有关参数初始化
         $info['per_page'] = $info['per_page'] ? : 20;
         $info['sortby']   = $info['sortby'] ? : 'updated_at';
         $info['sort']     = $info['sort'] ? : 'desc';
-        $info['current_step']     = $info['flow_id'] ? explode(',', $info['flow_id']) : $request->get('current_flow');
+        $info['current_step'] = $info['flow_id'] ? explode(',', $info['flow_id']) : $request->get('current_flow');
+        $info['was_send_sms'] = $info['was_send_sms'] ? 1 : 0;
         unset($info['flow_id']);
 
         $need = ['enroll_id', 'user_id', 'stu_code', 'full_name',
@@ -255,13 +256,13 @@ class ApplyDataController extends Controller
         $auth_info = JWTAuth::decode(JWTAuth::getToken());
         $author_id = $auth_info['sub'];
 
-        $allow = ['enroll_id', 'step', 'action', 'upgrade', 'act_key'];
+        $allow = ['enroll_id', 'flow_id', 'action'];
         $info = $request->only($allow);
 
         $operation_info = [
             'enroll_id' => $info['enroll_id'],
-            'step' => $info['step'],
-            'act_key' => $info['act_key'],
+            'flow_id' => $info['flow_id'],
+            'act_key' => $request->get('act_key'),
             'author_id' => $author_id
         ];
 
@@ -273,69 +274,98 @@ class ApplyDataController extends Controller
             return response()->json(['status' => 0, 'message' => 'action 参数错误']);
     }
 
-    public function upgrade($operation_info)
+    /**
+     * 将发送过信息的申请信息升阶到下一个流程
+     * @param Request $request
+     */
+    public function isSendSmsAndUpgrade(Request $request)
     {
-        $act = ActDesign::where('activity_key', '=', $operation_info['act_key'])
-            ->select(['current_flow', 'flow_structure'])
+        $act_key = $request->get('act_key');
+        $flow_id = $request->get('flow_id');
+
+        //检查每个申请的ID是否属于本人操作，并且判断是属于同一个阶段的
+        $auth_info = JWTAuth::decode(JWTAuth::getToken());
+        $author_id = $auth_info['sub'];
+
+        $act = ActDesign::where('activity_id', '=', $act_key)
+            ->select(['author_id'])
             ->first();
 
-        if ($operation_info['step'] > $act['current_flow'])
-            return response()->json(['status' => 0, 'message' => 'step大于活动的当前流程，无法提升申请信息所处阶段']);
-        //检查是否存在下一阶段
-        $flows_id = explode(',', $act['flow_structure']);
-        if (!isset($flows_id[$operation_info['step']]))
-            return response()->json(['status' => 0, 'message' => '该阶段申请信息已处于最高阶段，无法继续提升']);
+        //越权检查
+        if ($author_id != $act['author_id']) {
+            return response()->json(['status' => 0, 'message' => '非法操作'], 400);
+        }
+        //找出现已阶段流程
+        $new_flow = FlowInfo::where('flow_id', '>', $flow_id)
+            ->where('status', '>=', 0)
+            ->where('activity_key', $act_key)
+            ->select('flow_id')
+            ->first();
 
-        $act_key = $operation_info['act_key'];
-        $step = $operation_info['step'];
-        $add = 1;
-        $enroll_id = explode(',', $operation_info['enroll_id']);
-        foreach ($enroll_id as $key => $value) {
-            $this->dispatch(new ChangeStep($value, $act_key, $step, $add));
+        if (!$new_flow)
+            return response()->json([
+                'status' => 0,
+                'message' => '未找到下一个流程'
+            ], 400);
+
+        $update_data = [
+            'current_step' => $new_flow['flow_id'],
+            'was_send_sms' => 0
+        ];
+        $condition = [
+            'current_step' => $flow_id,
+            'was_send_sms' => 1
+        ];
+        if ((new ApplyData())->updateData($condition, $update_data))
+            return response()->json([
+                'status' => 0,
+                'message' => 'success'
+            ], 200);
+
+
+        return response()->json([
+            'status' => 1,
+            'message' => '服务器遇到错误'
+        ], 500);
+    }
+
+    public function upgrade($operation_info)
+    {
+        $act = ActDesign::where('activity_id', '=', $operation_info['act_key'])
+            ->select(['author_id'])
+            ->first();
+
+        //越权检查
+        if ($operation_info['author_id'] != $act['author_id']) {
+            return response()->json(['status' => 0, 'message' => '非法操作'], 400);
+        }
+        //检查是否存在下一阶段
+        $flow_list = (new FlowInfo())->getFlowList(['activity_key' => $operation_info['act_key']], ['flow_id']);
+        $i = count($flow_list);
+        foreach ($flow_list as $value) {
+            if ($operation_info['flow_id'] == $value)
+                break;
+            $i--;
+        }
+        if ($i == count($flow_list)) {
+            return response()->json(['status' => 0, 'message' => '已是最后一个流程'], 400);
         }
 
-        //如果step与活动的当前步骤相同，则将此步骤+1
-        if ($step == $act['current_flow'])
-            ActDesign::where('activity_key', '=', $act_key)->increment('current_flow', 1);
+        //更改申请信息所处流程号
+
+        $act_key = $operation_info['act_key'];
+        $new_flow = $flow_list[$i - 1];
+        $enroll_id = explode(',', $operation_info['enroll_id']);
+        foreach ($enroll_id as $value) {
+            $this->dispatch(new ChangeStep($value, $act_key, $new_flow));
+        }
 
         return response()->json(['status' => 1, 'message' => '申请已进入队列，如有失败请求，请重新尝试'], 202);
     }
 
     public function degrade($operation_info)
     {
-        $act = ActDesign::where('activity_key', '=', $operation_info['act_key'])
-            ->select(['current_flow', 'flow_structure'])
-            ->first();
-
-        if ($operation_info['step'] > $act['current_flow'])
-            return response()->json(['status' => 0, 'message' => 'step大于活动的当前流程，无法降低申请信息所处阶段']);
-        //检查是否存在上一阶段
-        if ($operation_info['step'] == 1)
-            return response()->json(['status' => 0, 'message' => '该阶段申请信息已处于最低阶段，无法继续下降']);
-
-        $act_key = $operation_info['act_key'];
-        $step = $operation_info['step'];
-        $add = -1;
-        $enroll_id = explode(',', $operation_info['enroll_id']);
-        foreach ($enroll_id as $key => $value) {
-            $this->dispatch(new ChangeStep($value, $act_key, $step, $add));
-        }
-
-        //如果step与活动的当前步骤相同且该阶段人数变为零，则将活动步骤-1
-        if ($step == $act['current_flow']) {
-            $data_m = new ApplyData();
-            $condition = [
-                'current_step' => $step,
-                'activity_key' => $act_key
-            ];
-            $need = ['enroll_id'];
-            $res = $data_m->getApplyData($condition, $need);
-            $apply_info = json_decode($res, true);
-            if (empty($apply_info))
-                ActDesign::where('activity_key', '=', $act_key)->decrement('current_flow', 1);
-        }
-
-        return response()->json(['status' => 1, 'message' => '申请已进入队列，如有失败请求，请重新尝试'], 202);
+        //
     }
 
     /**

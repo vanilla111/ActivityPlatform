@@ -16,21 +16,18 @@ class ChangeStep implements ShouldQueue
 
     private $act_key;
 
-    private $step;
-
-    private $add;
+    private $new_step;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($enroll_id, $act_key, $step, $add)
+    public function __construct($enroll_id, $act_key, $new_step)
     {
         $this->enroll_id = $enroll_id;
         $this->act_key = $act_key;
-        $this->step = $step;
-        $this->add = $add;
+        $this->new_step = $new_step;
     }
 
     /**
@@ -43,9 +40,7 @@ class ChangeStep implements ShouldQueue
         $condition = [
             'enroll_id' => $this->enroll_id,
             'activity_key' => $this->act_key,
-            'current_step' => $this->step
         ];
-        ApplyData::where($condition)->update(['was_send_sms' => 0]);
-        ApplyData::where($condition)->increment('current_step', $this->add);
+        ApplyData::where($condition)->update(['was_send_sms' => 0, 'current_step' => $this->new_step]);
     }
 }

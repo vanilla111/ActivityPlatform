@@ -31,7 +31,7 @@ $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', function ($api) {
     $api->group(['namespace' => 'App\Http\Controllers', 'middleware' => 'client.change'], function ($api) {
         //超级管理员
-        $api->resource('activity/admin/org', 'Admin\\OrgController');
+        $api->resource('activity/admin/org', 'Admin/OrgController');
         //管理员
         $api->post('activity/auth/login', 'AuthController@toLogin');
         $api->get('activity/auth/checkremember', 'AuthController@checkRememberStatus');

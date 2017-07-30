@@ -65,6 +65,8 @@ class ApplyData extends Model
             $condition['eq']['gender'] = $info['gender'];
         if (isset($info['act_key']))
             $condition['eq']['activity_key'] = $info['act_key'];
+        if (isset($info['was_send_sms']))
+            $condition['eq']['was_send_sms'] = $info['was_send_sms'];
         if (isset($info['user_id']))
             $condition['eq']['user_id'] = $info['user_id'];
         if (isset($info['name']))
