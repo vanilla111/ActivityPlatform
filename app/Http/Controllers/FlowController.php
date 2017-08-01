@@ -99,7 +99,7 @@ class FlowController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $flow_id)
+    public function show($flow_id)
     {
         $flow_m = new FlowInfo();
         $auth = JWTAuth::decode(JWTAuth::getToken());
@@ -151,7 +151,7 @@ class FlowController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $flow_id)
+    public function destroy($flow_id)
     {
         // 删除规则:
         // 1.该流程不能有申请信息

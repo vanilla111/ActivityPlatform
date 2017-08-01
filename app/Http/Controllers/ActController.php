@@ -34,6 +34,8 @@ class ActController extends Controller
         $sort = @ $info['sort'] ? : 'desc';
         $per_page = @ $info['per_page'] ? : 10;
 
+        //TODO 返回已报名人数信息
+
         //初始化查询条件
         $need = ['activity_id', 'activity_name', 'start_time', 'created_at', 'updated_at', 'status'];
         $condition['eq']['author_id'] = $author_id;
@@ -125,7 +127,7 @@ class ActController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $act_key)
+    public function show($act_key)
     {
         //解析token
         $token_info = JWTAuth::decode(JWTAuth::getToken());
@@ -142,6 +144,8 @@ class ActController extends Controller
         //检查活动所有者是否与token一致
         if ($res['author_id'] != $author_id)
             return response()->json(['status' => 0, 'message' => '非法请求'], 401);
+
+        //将所有流程返回
 
         return response()->json(['status' => 1, 'message' => 'success', 'data' => $res], 200);
     }
