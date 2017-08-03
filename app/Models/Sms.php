@@ -26,9 +26,14 @@ class Sms extends Model
     public function getSmsInfo($temp_id, $author_id, $need)
     {
         return $this->where('status', '>', 0)
-            ->where(['temp_id' => $temp_id, 'author_id' => $author_id])
+            ->where(['temp_id' => $temp_id])
             ->select($need)
             ->first();
+    }
+
+    public function getSms($temp_id)
+    {
+
     }
 
     public function storeSmsTemp($data)

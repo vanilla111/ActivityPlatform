@@ -28,12 +28,11 @@ Route::get('/test', 'BaseController@Test');
 |
 */
 
-//$api = app('Dingo\Api\Routing\Router');
-
-//$api->version('v1', function ($api) {
-    Route::group(['middleware' => 'client.change'], function () {
+    Route::group(['middleware' => 'client.change', 'prefix' => 'api'], function () {
         //超级管理员
         Route::resource('activity/admin/org', 'Admin\OrgController');
+        //组织管理员
+        Route::resource('activity/org', 'OrgController', ['except' => ['create', 'edit']]);
         //管理员
         Route::post('activity/auth/login', 'AuthController@toLogin');
         Route::get('activity/auth/checkremember', 'AuthController@checkRememberStatus');
@@ -64,4 +63,3 @@ Route::get('/test', 'BaseController@Test');
             Route::resource('activity/sms', 'SmsController', ['except' => ['create', 'edit']]);
         });
     });
-//});

@@ -20,7 +20,7 @@ class ApplyDataController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('data.actkey')->only(['index', 'sendSMS']);
+        $this->middleware('data.actkey')->only(['index']);
         $this->middleware('data.enrollid')->only(['show', 'update', 'destroy']);
         $this->middleware('data.flowid')->only(['store', 'update', 'operation', 'isSendSmsAndUpgrade']);
         $this->middleware('data.base')->only(['index', 'store', 'show', 'update', 'destroy']);
@@ -329,7 +329,7 @@ class ApplyDataController extends Controller
         ], 500);
     }
 
-    public function upgrade($operation_info)
+    protected function upgrade($operation_info)
     {
         $act = ActDesign::where('activity_id', '=', $operation_info['act_key'])
             ->select(['author_id'])
@@ -363,7 +363,7 @@ class ApplyDataController extends Controller
         return response()->json(['status' => 1, 'message' => '申请已进入队列，如有失败请求，请重新尝试'], 202);
     }
 
-    public function degrade($operation_info)
+    protected function degrade($operation_info)
     {
         //
     }

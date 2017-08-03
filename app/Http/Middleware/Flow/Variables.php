@@ -19,8 +19,8 @@ class Variables
     {
         $info = $request->all();
         $error_mes = [];
-        $auth = JWTAuth::decode(JWTAuth::getToken());
-        $auth_id = $auth['sub'];
+        $auth = json_decode(get_detail_auth_info()->content(), true);
+        $auth_id = $auth['user']['admin_id'];
         $request->attributes->add(compact('auth_id'));
 
         if (!empty($info['flow_name']))
@@ -40,8 +40,8 @@ class Variables
 
         //对比数据库检查sms_temp_id
         $sms_m = new Sms();
-        $sms_temp = $sms_m->getSmsInfo($info['sms_temp_id'], $auth_id, '*');
-        if (!$sms_temp)
+        $sms_temp = $sms_m->getSmsInfo($info['sms_temp_id'], '', '*');
+        if (empty($sms_temp) || ($sms_temp['author_id'] != $auth_id && $sms_temp['author_id'] != $auth['user']['pid']))
             return response()->json([
                 'status' => 0,
                 'message' => '无该短信模板或其已失效'

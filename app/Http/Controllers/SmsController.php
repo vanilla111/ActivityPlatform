@@ -13,6 +13,7 @@ class SmsController extends Controller
     public function __construct()
     {
         $this->middleware('sms.base')->only(['show', 'update', 'destroy']);
+        $this->middleware('sms.index')->only('index');
         $this->middleware('sms.store')->only(['store']);
         $this->middleware('sms.test')->only(['sendTestSms']);
     }
@@ -22,12 +23,11 @@ class SmsController extends Controller
      * 流程设计时应该调用这个方法
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $auth = JWTAuth::decode(JWTAuth::getToken());
-        $author_id = $auth['sub'];
+        $author_id_arr = $request->get('author_id_arr');
 
-        if (!$res = Sms::where('author_id', '=', $author_id)
+        if (!$res = Sms::whereIn('author_id', $author_id_arr)
             ->where('status', '>', '0')
             ->select(['temp_id', 'temp_name'])
             ->orderBy('updated_at', 'desc')
@@ -45,15 +45,12 @@ class SmsController extends Controller
     public function getAdminSmsTemp(Request $request)
     {
 //        $data = [
-//            'name' => [
-//                '${full_name}' => '姓名',
+//            'VerificationCode' => [
 //                '${stu_code}' => '学号',
-//                '${contact}' => '联系方式'
 //            ],
-//            'department' => []
 //        ];
 //        $update = ['dynamic_variables' => serialize($data)];
-//        AdminSmsTemp::where('admin_temp_id', 3)->update($update);
+//        AdminSmsTemp::where('admin_temp_id', 2)->update($update);
 //        return ['success'];
 //        $arr = ['name' => '${full_name}', 'department' => '红岩网校'];
 //        return json_encode($arr);
@@ -92,7 +89,6 @@ class SmsController extends Controller
     public function store(Request $request)
     {
         $type = $request->get('type');
-        //$var = $request->get('var');
         $dy_var = $request->get('dy_var');
         $admin_temp = $request->get('admin_temp');
         $admin_temp_id = $request->get('admin_temp_id');

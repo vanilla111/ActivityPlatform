@@ -59,36 +59,50 @@ class Store
                 ], 400);
         }
 
-        foreach ($var as $k => $v) {
-            $admin_temp['sms_temp'] = str_replace_first('***', $v, $admin_temp['sms_temp']);
-        }
-
         $dynamic_var = unserialize($admin_temp['dynamic_variables']);
         //return $admin_temp['sms_temp'];
-        //$admin_temp['sms_temp'] = '亲爱的${name}，恭喜您通过了考核，欢迎来到${department}一起学习工作。【红岩网校工作站】';
+        $flag = false;
+        $pattern = '/\${\w*}/';
         if (!$dynamic_var || empty($dynamic_var)) {
             //若没有设置动态变量,跳过检查，视为静态短信模板
-            $type = 0;
-        } else {
             $flag = false;
+        } else {
             //若设置了动态变量，检查前台所给变量中是否使用了动态变量，即是否检查是否是动态短信
-            $pattern = '/\${\w*}/';
-            preg_match_all($pattern, $admin_temp['sms_temp'], $m);
-
-            if (empty($m) || !$m)
+            $dy_var = [];
+            foreach ($var as $k => $v) {
                 $flag = false;
-            else {
-                $dy_var = [];
-                foreach ($m[0] as $k => $v) {
-                    foreach ($dynamic_var as $i => $j) {
-                        if (isset($dynamic_var[$i][$v])) {
-                            $dy_var[$v] = substr($v, 2, -1);
-                            $flag = true;
-                            break;
-                        }
+                foreach ($dynamic_var as $i => $j) {
+                    if (isset($dynamic_var[$i][$v])) {
+                        //$dy_var[$i] = substr($v, 2, -1);
+                        $dy_var[$i] = $v;
+                        $flag = true;
                     }
                 }
+                if (!$flag && preg_match($pattern, $v))
+                    return response()->json([
+                        'status' => 0,
+                        'message' => $k . '赋值失败，请勿赋值类似 ${xxx} 的值'
+                    ], 400);
+                else
+                    $dy_var[$k] = $v;
             }
+//            $pattern = '/\${\w*}/';
+//            preg_match_all($pattern, $admin_temp['sms_temp'], $m);
+//
+//            if (empty($m) || !$m)
+//                $flag = false;
+//            else {
+//                $dy_var = [];
+//                foreach ($m[0] as $k => $v) {
+//                    foreach ($dynamic_var as $i => $j) {
+//                        if (isset($dynamic_var[$i][$v])) {
+//                            $dy_var[$v] = substr($v, 2, -1);
+//                            $flag = true;
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
 
             $type = $flag ? 1 : 0;
         }

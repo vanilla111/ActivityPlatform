@@ -74,9 +74,11 @@ class Kernel extends HttpKernel
         'user.variables' => \App\Http\Middleware\User\Variables::class,
         'user.enroll' => \App\Http\Middleware\User\Enroll::class,
         'sms.base' => \App\Http\Middleware\Sms\Base::class,
+        'sms.index' => \App\Http\Middleware\Sms\Index::class,
         'sms.store' => \App\Http\Middleware\Sms\Store::class,
         'sms.variables' => \App\Http\Middleware\Sms\Variables::class,
         'sms.test' => \App\Http\Middleware\Sms\Test::class,
         'admin.base' => \App\Http\Middleware\Admin\Base::class,
+        'child_account' => \App\Http\Middleware\Org\Base::class
     ];
 }

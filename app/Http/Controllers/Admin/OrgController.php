@@ -23,23 +23,13 @@ class OrgController extends Controller
      */
     public function index()
     {
-        $admin_list = ActAdmin::where('pid', 0)->get();
+        $admin_list = ActAdmin::where('pid', 0)->orderBy('created_at', 'desc')->get();
 
         return response()->json([
             'status' => 1,
             'message' => 'success',
             'data' => $admin_list
         ], 200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -57,8 +47,14 @@ class OrgController extends Controller
                 'status' => 0,
                 'message' => 'account, password必需'
             ], 400);
+        $info['pid'] = 0;
         $data = unset_empty($info);
         $data['password'] = Hash::make($data['password']);
+        if (ActAdmin::where('account', $info['account'])->first())
+            return response()->json([
+                'status' => 0,
+                'message' => '该账号已存在'
+            ], 400);
         if (ActAdmin::create($data))
             return response()->json([
                 'status' => 1,
@@ -80,24 +76,13 @@ class OrgController extends Controller
      */
     public function show($id)
     {
-        $admin = ActAdmin::where('admin_id', $id)->first();
+        $admin = ActAdmin::where('admin_id', $id)->where('pid', '>=', 0)->first();
 
         return response()->json([
             'status' => 1,
             'message' => 'success',
             'data' => $admin
         ], 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -112,8 +97,22 @@ class OrgController extends Controller
         $require = ['account', 'password', 'admin_name','author_code', 'author_phone', 'out_of_dept'];
         $info = $request->only($require);
 
+        if (isset($info['password']))
+            $info['password'] = Hash::make($info['password']);
+        if (isset($info['account'])) {
+            $user_info = ActAdmin::where('account', $info['account'])->first();
+            if (!empty($user_info)) {
+                if ($user_info['admin_id'] != $id)
+                    return response()->json([
+                        'status' => 0,
+                        'message' => '改账号已存在'
+                    ], 400);
+            }
+        }
+
+
         $data = unset_empty($info);
-        if (ActAdmin::where('admin_id', $id)->update($data))
+        if (ActAdmin::where('admin_id', $id)->where('pid', '>=', 0)->update($data))
             return response()->json([
                 'status' => 1,
                 'message' => 'success'
@@ -133,6 +132,6 @@ class OrgController extends Controller
      */
     public function destroy($id)
     {
-        ActAdmin::deleted($id);
+        ActAdmin::where('admin_id', $id)->delete();
     }
 }

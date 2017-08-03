@@ -12,9 +12,9 @@ class ActAdmin extends Authenticatable
 
     protected  $primaryKey = 'admin_id';
 
-    protected  $fillable = ['admin_name', 'password', 'id', 'author_code', 'author_phone', 'account'];
+    protected  $fillable = ['admin_name', 'password', 'pid', 'author_code', 'author_phone', 'account', 'out_of_dept'];
 
-    protected  $hidden = ['password'];
+    protected  $hidden = ['password', 'remember_token', 'id'];
 
     public function getAuthInfo($condition, $need)
     {
