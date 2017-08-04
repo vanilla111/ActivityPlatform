@@ -70,6 +70,7 @@ class Kernel extends HttpKernel
         'data.variables' => \App\Http\Middleware\ApplyData\Variables::class,
         'data.operation' => \App\Http\Middleware\ApplyData\Operation::class,
         'data.sendSms' => \App\Http\Middleware\ApplyData\SendSms::class,
+        'data.sendSmsVariables' => \App\Http\Middleware\ApplyData\SendSmsVariables::class,
         'user.base' => \App\Http\Middleware\User\Base::class,
         'user.variables' => \App\Http\Middleware\User\Variables::class,
         'user.enroll' => \App\Http\Middleware\User\Enroll::class,

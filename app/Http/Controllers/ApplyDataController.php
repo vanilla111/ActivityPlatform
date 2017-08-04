@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendSms;
 use App\Models\ActAdmin;
 use App\Models\FlowInfo;
 use App\Models\Sms;
+use App\Models\SmsHistory;
 use Illuminate\Http\Request;
 use App\Models\ApplyData;
 use App\Models\ActDesign;
@@ -14,7 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use JWTAuth;
-use Illuminate\Support\Facades\Log;
+use Flc\Alidayu\Support;
 
 class ApplyDataController extends Controller
 {
@@ -29,6 +31,7 @@ class ApplyDataController extends Controller
         $this->middleware('data.checkauth')->only(['store']);
         $this->middleware('data.variables')->only(['store', 'update']);
         $this->middleware('data.sendSms')->only('sendSMS');
+        $this->middleware('data.sendSmsVariables')->only('sendSMS');
     }
 
     /**
@@ -376,236 +379,58 @@ class ApplyDataController extends Controller
      */
     public function sendSMS(Request $request)
     {
-        $allow = ['enroll_id', 'step', 'act_key', 'all', 'use_correlation'];
-        $info = $request->only($allow);
+        $admin_temp = $request->get('admin_temp');
+        //$sms = $request->get('sms');
+        $flow_id = explode(',', $request->get('flow_id'));
+        $enroll_id = $request->get('enroll_id');
+        $static_var = $request->get('static_var');
+        $dynamic_var = $request->get('dynamic_var');
+        $author_id = $request->get('author_id');
+        $author_pid = $request->get('author_pid');
 
-        //模型初始化
-        $data_m = new ApplyData();
-        $act_m = new ActDesign();
-        $flow_m = new FlowInfo();
-        $sms_m = new Sms();
-
-        //查询相关需要的信息
-        $act_condition = [
-            'activity_key' => $info['act_key'],
-        ];
-        $act_need = ['flow_structure', 'author_id'];
-        if (!$act_res = $act_m->getActInfo($act_condition, $act_need))
-            return response()->json([
-                'status' => 0,
-                'message' => '服务器繁忙，请稍后尝试'
-            ], 404);
-        $flow_structure = $act_res['flow_structure'];
-        $flow_list = explode(',', $flow_structure);
-        $flow_id = $flow_list[$info['step'] - 1];
-        //找到该流程
-        $flow_condition = [
+        $apply_data_m = new ApplyData();
+        //从数据库获取数据
+        $need = ['contact'];
+        if (!empty($dynamic_var)) {
+            foreach ($dynamic_var as $value)
+                array_push($need, $value);
+        }
+        $condition = [
+            'enroll_id' => $enroll_id,
             'flow_id' => $flow_id,
         ];
-        $flow_need = ['correlation', 'activity_key', 'sms_temp_id', 'SmsVariables'];
-        if (!$flow_res = $flow_m->getFlowInfo($flow_condition, $flow_need))
+        $apply_data_arr = $apply_data_m->getApplyDataToSendSms($condition, $need);
+
+        if (!$apply_data_arr || empty($apply_data_arr))
             return response()->json([
                 'status' => 0,
-                'message' => '服务器繁忙，请稍后尝试'
-            ], 404);
-
-        //如果关联，查找所有被关联活动的未发送短信的手机号码
-        if ($info['use_correlation'] == 'true') {
-            //是否有关联
-            if (empty($flow_res['correlation']))
-                return response()->json([
-                    'status' => 0,
-                    'message' => '该流程没有被设置关联，请不要传入use_correlation参数'
-                ], 400);
-            //如果有关联，则将其余活动的所有电话号码集中
-            $act_secret = explode(',', $flow_res['correlation']);
-
-            foreach ($act_secret as $secret) {
-                //自定义查询
-                $other_act = $act_m->getActInfo(['activity_secret' => $secret], ['flow_structure', 'activity_key']);
-                $other_act = json_decode($other_act, true);
-                if (empty($other_act)) {
-                    //数据库记录，记录短信发送历史
-                    $sms_history['failed_act'][$secret]['act'] = '该活动不存在或已删除';
-                    continue;
-                }
-                $other_structure = explode(',', $other_act['flow_structure']);
-                if (!$other_step = array_search($flow_id, $other_structure)) {
-                    $sms_history['failed_act'][$secret]['correlation'] = '该流程关联可能已经被被关联者解除';
-                    continue;
-                } else {
-                    $other_step += 1;
-                }
-                $other_key = $other_act['activity_key'];
-                $condition = [
-                    'current_step' => $other_step,
-                    'activity_key' => $other_key,
-                    'was_send_sms' => 0
-                ];
-                $need = ['contact'];
-
-                if (!$other_contact = $data_m->getApplyData($condition, $need)) {
-                    $sms_history['failed_act'][$secret]['apply_data'] = '用户申请信息获取失败';
-                    continue;
-                }
-
-                //得到secret对应活动的该流程的尚未发送短信的联系电话
-                $all_contact[$other_key] = [];
-                foreach ($other_contact as $value) {
-                    array_push($all_contact[$other_key], $value['contact']);
-                }
-            }
-        }
-
-        if ($info['all'] == 'true') {
-            $condition = [
-                'current_step' => $info['step'],
-                'activity_key' => $info['act_key'],
-                'was_send_sms' => 0
-            ];
-            $need = ['contact'];
-            if (!$contact = $data_m->getApplyData($condition, $need))
-                return response()->json([
-                    'status' => 0,
-                    'message' => '服务器繁忙，请稍后尝试'
-                ], 403);
-            $all_contact[$info['act_key']] = [];
-            foreach ($contact as $value) {
-                array_push($all_contact[$info['act_key']], $value['contact']);
-            }
-        } else {
-            if (!$idList = explode(',', $info['enroll_id']))
-                return response()->json([
-                    'status' => 0,
-                    'message' => '请使用半角逗号分割id'
-                ], 400);
-            //自定义查询
-            $contact = ApplyData::whereIn('enroll_id', $idList)
-                ->where('current_step', '=', $info['step'])
-                ->where('activity_key', '=', $info['act_key'])
-                ->where('was_send_sms', '=',0)
-                ->where('status', '>', 0)
-                ->select('contact')
-                ->get();
-            if (!$contact)
-                return response()->json([
-                    'status' => 0,
-                    'message' => '服务器繁忙，请稍候尝试'
-                ], 400);
-            $all_contact[$info['act_key']] = [];
-            foreach ($contact as $value) {
-                array_push($all_contact[$info['act_key']], $value['contact']);
-            }
-        }
-
-        //对每个活动的号码去重
-        $counter[] = '';  //计数君,记录每个活动的电话号码数量
-        $i = 0; //辅助变量
-        foreach ($all_contact as $key => $value) {
-            $all_contact[$key] = unique_array($value);
-            $key_arr[$i] = $key;
-            $counter[$key]['num'] = count($all_contact[$key]);
-            $i++;
-        }
-
-        //将所有号码求并集，再去重
-        $send_contact = [];
-        foreach ($all_contact as $key => $value) {
-            foreach ($value as $v)
-                array_push($send_contact, $v);
-        }
-        $send_contact = unique_array($send_contact);
-        //return $send_contact;
-
-        //如果需要发送的短信总数为零
-        $sum = count($send_contact);  //总数君,预计要发送的条数
-        if ($sum <= 0)
-            return response()->json([
-                'status' => 0,
-                'message' => '没有需要发送短信的号码'
+                'message' => '发送失败，可能需要发送的短信数为0'
             ], 400);
 
-        //根据已经估算出的需要发送短信的总数
-        $sms_need = ['author_id', 'admin_temp_id', 'provider', 'appKey', 'secret', 'SmsFreeSignName', 'SmsID', 'content'];
-        if (! $sms_temp = $sms_m->getSmsInfo($flow_res['sms_temp_id'], $sms_need)) {
-            return response()->json([
-                'status' => 0,
-                'message' => '短信服务初始化失败'
-            ], 400);
-        }
-        $sms_temp = json_decode($sms_temp, true);
-        //如果一个用户使用网校提供的短信服务，判断是否有充足的余额
-        if (!empty($sms_temp['admin_temp_id'])) {
-            //查找用户表，获取剩余短信条数
-            $content_length = mb_strlen($sms_temp['content']);
-            if ($content_length > 67)
-                $temp_sum = $sum * 2;
-            else
-                $temp_sum = $sum;
-            $auth_m = new ActAdmin();
-            $auth_info = $auth_m->getAuthInfo(['admin_id' => $sms_temp['author_id']], 'sms_num');
-            if ($auth_info['sms_num'] < $sum)
-                return response()->json([
-                    'status' => 0,
-                    'message' => '预计将发送' . $temp_sum . '条短信，但您的可发送短信余额为' . $auth_info['sms_num'] . '条，请先充值'
-                ], 400);
-        }
-        unset($counter[0]);
-
-        //如果有关联，两两求交集，计算各个活动所需发送短信人数所占总人数的百分比
-        if ($info['use_correlation'] == 'true') {
-            switch (count($counter)) {
-                case 1 : {
-                    break;
+        //加入队列, 若然有字数限制则将注释去除
+        //$content = $sms['content'];
+        $sms_id = $admin_temp['sms_id'];
+        $sms_free_sign_name = $admin_temp['sms_free_sign_name'];
+        $vars = [];
+        foreach ($apply_data_arr as $key => $value) {
+            if (!empty($dynamic_var))
+                foreach ($dynamic_var as $k => $v) {
+                    $vars[$k] = $value[$v];
+                    //$content = str_replace_first('${' . $k . '}', $vars[$k], $content);
                 }
-                case 2 : { //两个活动求交集
-                    $intersection_01 = array_intersect($all_contact[$key_arr[0]], $all_contact[$key_arr[1]]);   //两个活动的交集电话号码
-                    $temp_count = count($intersection_01);
-                    $counter[$key_arr[0]] = $counter[$key_arr[0]]['num'] - $temp_count / 2;
-                    $counter[$key_arr[1]] = $counter[$key_arr[1]]['num'] - $temp_count / 2;
-                    break;
-                }
-                case 3 : { //三个活动求交集,两两求交集
-                    $all_intersection = array_intersect($all_contact[$key_arr[0]], $all_contact[$key_arr[1]], $all_contact[$key_arr[2]]);
-                    $all_count = count($all_intersection);
-                    $n = count($counter);
-                    for ($i = 0; $i < $n; $i++) {
-                        for ($j = $i + 1; $j < $n; $j++) {
-                            $intersection_ij = array_intersect($all_contact[$key_arr[$i]], $all_contact[$key_arr[$j]]);
-                            $intersection_ija = array_intersect($all_intersection, $intersection_ij);
-                            $count_ij = count($intersection_ij);
-                            $count_ija = count($intersection_ija);
-                            $counter[$key_arr[$i]] = $counter[$key_arr[$i]]['num'] - ($count_ij - $count_ija) / 2;
-                            $counter[$key_arr[$j]] = $counter[$key_arr[$j]]['num'] - ($count_ij - $count_ija) / 2;
-                        }
-                        $counter[$key_arr[$i]] = $counter[$key_arr[$i]]['num'] - $all_count / 3;
-                    }
-                    break;
-                }
-                default : {
-                    return response()->json([
-                        'status' => 0,
-                        'message' => '未知错误，请稍后尝试'
-                    ], 400);
-                }
+            foreach ($static_var as $k => $v) {
+                $vars[$k] = $v;
             }
-        }
 
-        //构造发送历史记录
-        $sms_history = [
-            'who_send' => 'enroll_system_' . $act_res['author_id'] . '_' . $info['act_key'],
-            'num' => $sum,
-            'smsNum' => $temp_sum,
-            'act_info' => serialize($counter),
-            'failed_act' => serialize($sms_history['failed_act']),
-            'content' => serialize($sms_temp),
-        ];
-//        return $sms_temp;
-//        return $send_contact;
-//return $sms_history;
-//        return $counter;
-        return response()->json(['status' => 0, 'message' => '稍后完善 ^_^'], 400);
-        //加入队列
+            $this->dispatch(new SendSms($value['contact'], $vars, $sms_free_sign_name, $sms_id, $author_id, $author_pid));
+        }
+        return response()->json(['status' => 1, 'message' => '发送任务已进入队列，如有失败请重新尝试'], 200);
+    }
+
+    public function getHistory()
+    {
+        $res = SmsHistory::select('content')->orderBy('created_at', 'desc')->get();
+        return $res;
     }
 
     public function getCSV()

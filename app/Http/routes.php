@@ -55,6 +55,7 @@ Route::get('/test', 'BaseController@Test');
             Route::resource('activity/flow', 'FlowController', ['except' => ['create', 'edit']]);
             //申请信息
             Route::post('activity/applydata/sendsms', 'ApplyDataController@sendSMS');
+            Route::get('activity/applydata/history', 'ApplyDataController@getHistory');
             Route::post('activity/applydata/operation', 'ApplyDataController@operation');
             Route::resource('activity/applydata', 'ApplyDataController', ['except' => ['create', 'edit']]);
             //短信

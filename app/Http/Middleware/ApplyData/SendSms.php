@@ -6,13 +6,14 @@ use App\Http\Requests\Request;
 use App\Models\AdminSmsTemp;
 use App\Models\FlowInfo;
 use App\Models\Sms;
+use App\Models\SmsNum;
 use App\Models\SmsProvider;
 use Closure;
 
 class SendSms
 {
     /**
-     * Handle an incoming request.
+     * 身份，流程，短信模版验证合法及有效性
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -20,7 +21,7 @@ class SendSms
      */
     public function handle($request, Closure $next)
     {
-        $auth = json_decode(get_detail_auth_info(), true);
+        $auth = json_decode(get_detail_auth_info()->content(), true);
         $author_id = $auth['user']['admin_id'];
         $author_pid = $auth['user']['pid'];
         $info = $request->all();
@@ -31,7 +32,7 @@ class SendSms
                 return response()->json(['status' => 0, 'message' => $key . '参数必须'], 400);
 
         $flow_id = explode(',', $info['flow_id']);
-        //$enroll_id = explode(',', $info['enroll_id']);
+        $enroll_id = explode(',', $info['enroll_id']);
 
         //如果多个流程
         if (count($flow_id) > 1) {
@@ -68,13 +69,18 @@ class SendSms
                 ], 400);
         } else {
             //如果只有一个流程，检查该流程是否属于该用户
-            $flow  = FlowInfo::where('flow_id', $info['flow_id'])->first();
-            if (empty($flow) || ($flow['author_id'] != $author_id))
+            $flow  = FlowInfo::where('flow_id', $info['flow_id'])->select('sms_temp_id')->first();
+            if (empty($flow))
                 return response()->json([
                     'status' => 0,
                     'message' => '非法访问'
                 ], 400);
-            $sms = Sms::where('temp_id', $flow_id)->first();
+            $sms = Sms::where('temp_id', $flow['sms_temp_id'])->first();
+            if ($sms['author_id'] != $author_id && $sms['author_id'] != $author_pid)
+                return response()->json([
+                    'status' => 0,
+                    'message' => '非法访问'
+                ], 400);
         }
 
         //检查短模版是否有效
@@ -85,9 +91,26 @@ class SendSms
                 'message' => $res['message']
             ], 400);
 
-        //判断发送的静态短信 还是 动态短信
+        //预计将发送的条数，检查短信余额是否充足
+        if ($author_pid > 0 )
+            $sms_num = SmsNum::where('admin_id', $author_pid)->first();
+        else
+            $sms_num = SmsNum::where('admin_id', $author_id)->first();
 
+        if (empty($sms_num) || count($enroll_id) > $sms_num['sms_num'])
+            return response()->json([
+                'status' => 0,
+                'message' => '剩余短信条数不足（如果短信内容超过76字，按两条或者更高计算)'
+            ], 400);
+
+        //准备发送短信必需的内容
+        // 1. 短信模版 sms  & admin_temp
+        // 2. 短信变量赋值
+        // 3. 接收号码
+        $request->attributes->add(compact('enroll_id'));
         $request->attributes->add(compact('sms'));
+        $request->attributes->add(compact('author_id'));
+        $request->attributes->add(compact('author_pid'));
         return $next($request);
     }
 
@@ -104,12 +127,12 @@ class SendSms
         if (empty($admin_temp) || $admin_temp['status'] <= 0)
             return ['status' => false, 'message' => '短信模版已失效（原始模版失效）'];
 
-        $sms_provider = SmsProvider::where('id', $admin_temp['sms_provider'])->first();
-        if (empty($sms_provider) || $sms_provider['status'] <= 0)
-            return ['status' => false, 'message' => '短信模版已失效（短信服务提供商失效）'];
+//        $sms_provider = SmsProvider::where('id', $admin_temp['sms_provider'])->first();
+//        if (empty($sms_provider) || $sms_provider['status'] <= 0)
+//            return ['status' => false, 'message' => '短信模版已失效（短信服务提供商失效）'];
 
         $request->attributes->add(compact('admin_temp'));
-        $request->attributes->add(compact('sms_provider'));
+        //$request->attributes->add(compact('sms_provider'));
 
         return ['status' => true];
     }
@@ -119,6 +142,9 @@ class SendSms
      */
     protected function isDynamic(Sms $sms)
     {
-        //
+        if ($sms['type'] == 1)
+            return true;
+
+        return false;
     }
 }

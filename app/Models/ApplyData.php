@@ -36,6 +36,17 @@ class ApplyData extends Model
         return $sql->select($need)->paginate($info['per_page']);
     }
 
+    public function getApplyDataToSendSms($condition, $need)
+    {
+        return $this->whereIn('enroll_id', $condition['enroll_id'])
+            ->whereIn('current_step', $condition['flow_id'])
+            ->where('status', 1)
+            ->where('was_send_sms', 0)
+            ->distinct('contact')
+            ->select($need)
+            ->get();
+    }
+
     public function applyDataExists($condition = [])
     {
         return $this->where($condition)->where('status', '>=', 0)->exists();
