@@ -22,7 +22,7 @@ class Base
         $temp_id = $request->segment(4);
 
         $sms_m = new Sms();
-        if (!$res = $sms_m->getSmsInfo($temp_id, '*'))
+        if (!$res = $sms_m->getSmsInfo($temp_id, '','*'))
             return response()->json([
                 'status' => 0,
                 'message' => '该模版不存在'

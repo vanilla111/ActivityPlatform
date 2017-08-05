@@ -70,7 +70,6 @@ class Store
             //若设置了动态变量，检查前台所给变量中是否使用了动态变量，即是否检查是否是动态短信
             $dy_var = [];
             foreach ($var as $k => $v) {
-                $flag = false;
                 foreach ($dynamic_var as $i => $j) {
                     if (isset($dynamic_var[$i][$v])) {
                         //$dy_var[$i] = substr($v, 2, -1);

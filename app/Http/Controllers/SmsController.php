@@ -45,12 +45,14 @@ class SmsController extends Controller
     public function getAdminSmsTemp(Request $request)
     {
 //        $data = [
-//            'VerificationCode' => [
-//                '${stu_code}' => '学号',
+//            'name' => [
+//                '${full_name}' => '姓名',
 //            ],
+//            'content' => '',
+//            'next' => ''
 //        ];
 //        $update = ['dynamic_variables' => serialize($data)];
-//        AdminSmsTemp::where('admin_temp_id', 2)->update($update);
+//        AdminSmsTemp::where('admin_temp_id', 4)->update($update);
 //        return ['success'];
 //        $arr = ['name' => '${full_name}', 'department' => '红岩网校'];
 //        return json_encode($arr);

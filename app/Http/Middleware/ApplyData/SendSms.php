@@ -61,8 +61,8 @@ class SendSms
 
             //检查sms_author_id是否是该用户及其母账户的
             $sms =  Sms::where('temp_id', $temp_id)->first();
-            $sms_author_id = $sms['author'];
-            if ($sms_author_id != $author_id || $sms_author_id != $author_pid)
+            $sms_author_id = $sms['author_id'];
+            if ($sms_author_id != $author_id && $sms_author_id != $author_pid)
                 return response()->json([
                     'status' => 0,
                     'message' => '非法访问'

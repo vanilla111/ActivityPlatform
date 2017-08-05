@@ -20,7 +20,7 @@ class Index
         $auth = JWTAuth::decode(JWTAuth::getToken());
         $author_id = $auth['sub'];
 
-        $admin_info = ActAdmin::where('admin_id', $author_id)->selecet('pid')->first();
+        $admin_info = ActAdmin::where('admin_id', $author_id)->select('pid')->first();
         if (!$admin_info)
             return response()->json([
                 'status' => 0,

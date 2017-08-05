@@ -144,7 +144,7 @@ class ApplyDataController extends Controller
                 'message' => '添加失败'
             ], 400);
         }
-        if (!ActDesign::where('activity_id', '=', $info['act_key'])->increment('current_num', 1)) {
+        if (!ActDesign::where('activity_id', '=', $act_key)->increment('current_num', 1)) {
             DB::rollBack();
             return response()->json([
                 'status'  => 0,
