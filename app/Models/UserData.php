@@ -11,7 +11,7 @@ class UserData extends Model
 
     protected $primaryKey = 'user_id';
 
-    protected $fillable = ['full_name', 'gender', 'stu_code',
+    protected $fillable = ['full_name', 'gender', 'stu_code', 'wx_openid', 'wx_nickname', 'wx_avatar',
         'college', 'contact', 'password', 'grade', 'have_org'];
 
     protected $hidden = ['password'];

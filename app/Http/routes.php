@@ -27,6 +27,10 @@ Route::get('/test', 'BaseController@Test');
 | kernel and includes session state, CSRF protection, and more.
 |
 */
+    Route::group(['middleware' => ['web', 'WXAuth'], 'prefix' => 'wx'], function () {
+        Route::get('userInfo', 'WeiXin\EnrollController@getUserInfo');
+        Route::post('enroll', 'WeiXin\EnrollController@enroll');
+    });
 
     Route::group(['middleware' => 'client.change', 'prefix' => 'api'], function () {
         //超级管理员

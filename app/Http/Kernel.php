@@ -55,10 +55,8 @@ class Kernel extends HttpKernel
         'act.base' => \App\Http\Middleware\Act\Base::class,
         'act.variables' => \App\Http\Middleware\Act\Variables::class,
         'act.store' => \App\Http\Middleware\Act\Store::class,
-        //'act.update' => \App\Http\Middleware\Act\Update::class,
         'flow.base' => \App\Http\Middleware\Flow\Base::class,
         'flow.store' => \App\Http\Middleware\Flow\Store::class,
-        //'flow.update' => \App\Http\Middleware\Flow\Update::class,
         'flow.variables' => \App\Http\Middleware\Flow\Variables::class,
         'data.actkey' => \App\Http\Middleware\ApplyData\ActKey::class,
         'data.enrollid' => \App\Http\Middleware\ApplyData\EnrollId::class,
@@ -80,6 +78,7 @@ class Kernel extends HttpKernel
         'sms.variables' => \App\Http\Middleware\Sms\Variables::class,
         'sms.test' => \App\Http\Middleware\Sms\Test::class,
         'admin.base' => \App\Http\Middleware\Admin\Base::class,
-        'child_account' => \App\Http\Middleware\Org\Base::class
+        'child_account' => \App\Http\Middleware\Org\Base::class,
+        'WXAuth' => \App\Http\Middleware\WeiXinAuthenticate::class
     ];
 }

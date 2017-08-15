@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use ClassesWithParents\D;
 use Illuminate\Http\Request;
 use App\Models\UserData;
 use App\Models\ActDesign;
