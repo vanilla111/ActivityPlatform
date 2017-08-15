@@ -41,7 +41,7 @@ class WeiXinAuthenticate
      * 跳转域名
      * @var string
      */
-    protected $domain = 'http://activity.redrock.team';
+    protected $domain = 'http://hongyan.cqupt.edu.cn';
 
     /**
      * Handle an incoming request.
@@ -99,7 +99,7 @@ class WeiXinAuthenticate
 
             $oauth2 = $this->baseOAUTH . '?' . $this->build_query([
                     'appid' => $config['appid'],
-                    'redirect_uri' => $this->domain . '/wx',
+                    'redirect_uri' => $this->domain . '/activity/wx',
                     'response_type' => 'code',
                     'scope' => $this->scope,
                     'state' => $this->state
