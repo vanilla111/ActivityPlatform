@@ -23,7 +23,7 @@ class EnrollController extends Controller
 
     public function getUserInfo(Request $request)
     {
-        $user_info = $request->get('user');
+        $user_info = $request->session()->get("weixin.user");
         //首先查看本地数据库中是否有相应的信息
         $user_data_m = new UserData();
         $need = ['user_id',  'contact', 'stu_code', 'wx_nickname', 'wx_avatar', 'full_name'];
