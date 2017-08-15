@@ -41,7 +41,7 @@ class WeiXinAuthenticate
      * 跳转域名
      * @var string
      */
-    protected $domain = 'http://hongyan.cqupt.edu.cn';
+    protected $domain = 'http://activity.redrock.team';
 
     /**
      * Handle an incoming request.
@@ -158,7 +158,7 @@ class WeiXinAuthenticate
     {
         $queries = array_except($request->query(), ['code', 'state']);
 
-        return $this->domain . '/ActivityPlatform' . (empty($queries) ? '' : '?' . $this->build_query($queries));
+        return $this->domain . (empty($queries) ? '' : '?' . $this->build_query($queries));
     }
 
     private function build_query(array $data)
