@@ -55,7 +55,7 @@ class WeiXinAuthenticate
     {
         $user = [
             'openid'   => 'ouRCyjng0vYbA0di_cvqh74W__1g',
-            'nickname' => 'wws',
+            'nickname' => 'test',
             'avatar' => 'test'
         ];
         $request->session()->put('weixin.user', $user);

@@ -34,11 +34,11 @@ class FlowController extends Controller
             'author_id' => $auth_id,
             'activity_id' => $act_key
         ];
-        $need = ['flow_structure'];
+        $need = ['activity_id'];
 
         $act_m = new ActDesign();
         if (!$act = $act_m->getActInfo($condition, $need)) {
-            return response()->json(['status' => 0, 'message' => '未找到该活动'], 404);
+            return response()->json(['status' => 0, 'message' => '未找到该活动'], 400);
         }
 
         $condition = ['activity_key' => $act_key];

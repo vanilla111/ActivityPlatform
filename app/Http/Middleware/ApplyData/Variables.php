@@ -39,9 +39,9 @@ class Variables
             if (!check_phoneNum($info['contact']))
                 array_push($error_mes, '联系方式有误');
 
-//        if (!empty($info['gender']))
-//            if ($info['gender'] != '男' || $info['gender'] != "女")
-//                array_push($error_mes, '性别参数有误');
+        if (!empty($info['gender']))
+            if ($info['gender'] != '男' || $info['gender'] != "女")
+                array_push($error_mes, '性别参数有误');
 
         if (!empty($info['college']))
             if (!is_numeric($info['college']) || $info['college'] <= 0)

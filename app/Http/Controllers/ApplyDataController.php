@@ -269,9 +269,9 @@ class ApplyDataController extends Controller
             'author_id' => $author_id
         ];
 
-        if (strtolower($info['action']) == 'upgrade')
+        if (strtolower($info['action']) == 'up')
             return $this->upgrade($operation_info);
-        elseif (strtolower($info['action']) == 'degrade')
+        elseif (strtolower($info['action']) == 'de')
             return $this->degrade($operation_info);
         else
             return response()->json(['status' => 0, 'message' => 'action 参数错误']);
@@ -345,7 +345,7 @@ class ApplyDataController extends Controller
         //检查是否存在下一阶段
         $flow_list = (new FlowInfo())->getFlowList(['activity_key' => $operation_info['act_key']], ['flow_id']);
         $i = count($flow_list);
-        foreach ($flow_list as $value) {
+        foreach ($flow_list as  $value) {
             if ($operation_info['flow_id'] == $value)
                 break;
             $i--;
@@ -368,7 +368,7 @@ class ApplyDataController extends Controller
 
     protected function degrade($operation_info)
     {
-        //
+        return response()->json(['status' => 0, 'message' => '暂不提供该功能'], 200);
     }
 
     /**

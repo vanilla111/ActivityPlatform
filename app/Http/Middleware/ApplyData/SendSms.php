@@ -73,7 +73,7 @@ class SendSms
             if (empty($flow))
                 return response()->json([
                     'status' => 0,
-                    'message' => '非法访问'
+                    'message' => '非法访问，或该流程没有设置短信模版'
                 ], 400);
             $sms = Sms::where('temp_id', $flow['sms_temp_id'])->first();
             if ($sms['author_id'] != $author_id && $sms['author_id'] != $author_pid)

@@ -48,6 +48,8 @@ class UserController extends Controller
         $user_info['password'] = Hash::make($user_info['password']);
         $user_info['gender'] = $stu_info['data']['gender'];
         $user_info['grade'] = $stu_info['data']['grade'];
+        $user_info['full_name'] = $stu_info['data']['name'];
+        $user_info['college'] = $stu_info['data']['collage'];
         if(!UserData::create($user_info))
             return response()->json(['status' => 0, 'message' => '登录失败，请重新尝试登录'], 400);
 

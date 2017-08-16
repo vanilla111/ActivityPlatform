@@ -66,7 +66,7 @@ class Kernel extends HttpKernel
         'data.flowid' => \App\Http\Middleware\ApplyData\FlowId::class,
         'data.checkauth' => \App\Http\Middleware\ApplyData\CheckAuth::class,
         'data.variables' => \App\Http\Middleware\ApplyData\Variables::class,
-        'data.operation' => \App\Http\Middleware\ApplyData\Operation::class,
+        //'data.operation' => \App\Http\Middleware\ApplyData\Operation::class,
         'data.sendSms' => \App\Http\Middleware\ApplyData\SendSms::class,
         'data.sendSmsVariables' => \App\Http\Middleware\ApplyData\SendSmsVariables::class,
         'user.base' => \App\Http\Middleware\User\Base::class,
