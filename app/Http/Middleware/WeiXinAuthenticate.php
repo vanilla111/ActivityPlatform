@@ -53,13 +53,13 @@ class WeiXinAuthenticate
      */
     public function handle($request, Closure $next)
     {
-//        $user = [
-//            'openid'   => 'ouRCyjng0vYbA0di_cvqh74W__1g',
-//            'nickname' => 'wws',
-//            'avatar' => 'test'
-//        ];
-//        $request->session()->put('weixin.user', $user);
-//        $request->attributes->add(compact('user'));
+        $user = [
+            'openid'   => 'ouRCyjng0vYbA0di_cvqh74W__1g',
+            'nickname' => 'wws',
+            'avatar' => 'test'
+        ];
+        $request->session()->put('weixin.user', $user);
+        $request->attributes->add(compact('user'));
 
         $config = $this->load();
 
@@ -92,22 +92,23 @@ class WeiXinAuthenticate
 
                     return redirect()->to($this->url($request));
                 }
-            } else {
-                // 生成随机的state字符串
-                $this->state = sha1(uniqid(mt_rand(1, 1000000), true));
-
-                $oauth2 = $this->baseOAUTH . '?' . $this->build_query([
-                        'appid' => $config['appid'],
-                        'redirect_uri' => $this->domain . '/activity/wx',
-                        'response_type' => 'code',
-                        'scope' => $this->scope,
-                        'state' => $this->state
-                    ]);
-
-                $request->session()->set('weixin.state', $this->state);
-
-                return new RedirectResponse($oauth2 . '#wechat_redirect');
             }
+
+            // 生成随机的state字符串
+            $this->state = sha1(uniqid(mt_rand(1, 1000000), true));
+
+            $oauth2 = $this->baseOAUTH . '?' . $this->build_query([
+                    'appid' => $config['appid'],
+                    'redirect_uri' => $this->domain . '/activity/wx',
+                    'response_type' => 'code',
+                    'scope' => $this->scope,
+                    'state' => $this->state
+                ]);
+
+            $request->session()->set('weixin.state', $this->state);
+
+            return new RedirectResponse($oauth2 . '#wechat_redirect');
+
         }
 
         return $next($request);
