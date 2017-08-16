@@ -35,37 +35,38 @@ Route::get('/test', 'BaseController@Test');
 
     Route::group(['middleware' => 'client.change', 'prefix' => 'api'], function () {
         //超级管理员
-        Route::resource('activity/admin/org', 'Admin\OrgController');
+        Route::resource('admin/org', 'Admin\OrgController');
+        Route::resource('admin/smstemp', 'Admin\SmsTempController');
         //组织管理员
-        Route::resource('activity/org', 'OrgController', ['except' => ['create', 'edit']]);
+        Route::resource('org', 'OrgController', ['except' => ['create', 'edit']]);
         //管理员
-        Route::post('activity/auth/login', 'AuthController@toLogin');
-        Route::get('activity/auth/checkremember', 'AuthController@checkRememberStatus');
-        Route::get('activity/auth/cancelremember', 'AuthController@cancelRememberToken');
-        Route::resource('activity/auth', 'AuthController', ['except' => ['index', 'create', 'destroy']]);
+        Route::post('auth/login', 'AuthController@toLogin');
+        Route::get('auth/checkremember', 'AuthController@checkRememberStatus');
+        Route::get('auth/cancelremember', 'AuthController@cancelRememberToken');
+        Route::resource('auth', 'AuthController', ['except' => ['index', 'create', 'destroy']]);
         //用户
         Route::group(['middleware' => 'web'], function () {
-            Route::post('activity/user/login', 'UserController@toLogin');
-            Route::post('activity/user/enroll', 'UserController@Enroll');
-            Route::get('activity/user/applydata', 'UserController@getUserApplyData');
-            Route::resource('activity/user', 'UserController', ['except' => ['index', 'create', 'destroy', 'edit']]);
+            Route::post('user/login', 'UserController@toLogin');
+            Route::post('user/enroll', 'UserController@Enroll');
+            Route::get('user/applydata', 'UserController@getUserApplyData');
+            Route::resource('user', 'UserController', ['except' => ['index', 'create', 'destroy', 'edit']]);
         });
 
         Route::group(['middleware' => 'jwt.auth'], function () {
             //活动
-            Route::put('activity/act/{act_key}/start', 'ActController@startAct')->where('act_key', '[0-9]+');
-            Route::put('activity/act/{act_key}/end', 'ActController@endAct')->where('act_key', '[0-9]+');
-            Route::resource('activity/act', 'ActController', ['except' => ['create', 'edit']]);
+            Route::put('act/{act_key}/start', 'ActController@startAct')->where('act_key', '[0-9]+');
+            Route::put('act/{act_key}/end', 'ActController@endAct')->where('act_key', '[0-9]+');
+            Route::resource('act', 'ActController', ['except' => ['create', 'edit']]);
             //流程
-            Route::resource('activity/flow', 'FlowController', ['except' => ['create', 'edit']]);
+            Route::resource('flow', 'FlowController', ['except' => ['create', 'edit']]);
             //申请信息
-            Route::post('activity/applydata/sendsms', 'ApplyDataController@sendSMS');
-            Route::get('activity/applydata/history', 'ApplyDataController@getHistory');
-            Route::post('activity/applydata/operation', 'ApplyDataController@operation');
-            Route::resource('activity/applydata', 'ApplyDataController', ['except' => ['create', 'edit']]);
+            Route::post('applydata/sendsms', 'ApplyDataController@sendSMS');
+            Route::get('applydata/history', 'ApplyDataController@getHistory');
+            Route::post('applydata/operation', 'ApplyDataController@operation');
+            Route::resource('applydata', 'ApplyDataController', ['except' => ['create', 'edit']]);
             //短信
-            Route::get('activity/sms/templet', 'SmsController@getAdminSmsTemp');
+            Route::get('sms/templet', 'SmsController@getAdminSmsTemp');
             //$api->post('activity/sms/testsms', 'SmsController@sendTestSms');
-            Route::resource('activity/sms', 'SmsController', ['except' => ['create', 'edit']]);
+            Route::resource('sms', 'SmsController', ['except' => ['create', 'edit']]);
         });
     });

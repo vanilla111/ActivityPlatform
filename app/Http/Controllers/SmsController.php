@@ -44,18 +44,6 @@ class SmsController extends Controller
      */
     public function getAdminSmsTemp(Request $request)
     {
-//        $data = [
-//            'name' => [
-//                '${full_name}' => '姓名',
-//            ],
-//            'content' => '',
-//            'next' => ''
-//        ];
-//        $update = ['dynamic_variables' => serialize($data)];
-//        AdminSmsTemp::where('admin_temp_id', 4)->update($update);
-//        return ['success'];
-//        $arr = ['name' => '${full_name}', 'department' => '红岩网校'];
-//        return json_encode($arr);
         $admin_temp_m = new AdminSmsTemp();
         $condition = [
             'type' => $request->get('type') ? : 1
@@ -83,7 +71,7 @@ class SmsController extends Controller
     }
 
     /**
-     * 创建一个短信模版，主要为自定义和网校提供两种
+     * 创建一个短信模版\
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response

@@ -11,7 +11,7 @@ class AdminSmsTemp extends Model
     protected $primaryKey = 'admin_temp_id';
 
     protected $fillable = ['sms_temp', 'admin_id', 'temp_name', 'type', 'sms_free_sign_name', 'sms_id', 'sms_variables',
-        'dynamic_variables', 'content'];
+        'dynamic_variables', 'content', 'sms_provider', 'sms_type'];
 
     public function getSmsList($condition, $need)
     {
