@@ -18,7 +18,7 @@ class Base
     public function handle($request, Closure $next)
     {
         //检查必须参数
-        $act_key = $request->segment(4);
+        $act_key = $request->segment(3);
 
         //解析token
         $token_info = JWTAuth::decode(JWTAuth::getToken());

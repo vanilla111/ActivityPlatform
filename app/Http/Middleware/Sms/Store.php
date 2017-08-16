@@ -60,7 +60,6 @@ class Store
         }
 
         $dynamic_var = unserialize($admin_temp['dynamic_variables']);
-        //return $admin_temp['sms_temp'];
         $flag = false;
         $pattern = '/\${\w*}/';
         if (!$dynamic_var || empty($dynamic_var)) {

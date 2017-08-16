@@ -15,7 +15,7 @@ class EnrollId
      */
     public function handle($request, Closure $next)
     {
-        $enroll_id = $request->segment(4);
+        $enroll_id = $request->segment(3);
 
         $data_m = new ApplyData();
         $apply = $data_m->getApplyData(['enroll_id' => $enroll_id], '*');

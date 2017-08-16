@@ -18,7 +18,7 @@ class Base
      */
     public function handle($request, Closure $next)
     {
-        $flow_id = $request->segment(4);
+        $flow_id = $request->segment(3);
         $auth = JWTAuth::decode(JWTAuth::getToken());
         $auth_id = $auth['sub'];
         $act_key = $request->get('act_key');

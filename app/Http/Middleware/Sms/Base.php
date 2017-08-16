@@ -19,7 +19,7 @@ class Base
     {
         $auth = JWTAuth::decode(JWTAuth::getToken());
         $author_id = $auth['sub'];
-        $temp_id = $request->segment(4);
+        $temp_id = $request->segment(3);
 
         $sms_m = new Sms();
         if (!$res = $sms_m->getSmsInfo($temp_id, '','*'))
