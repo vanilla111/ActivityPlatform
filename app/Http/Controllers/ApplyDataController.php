@@ -346,7 +346,7 @@ class ApplyDataController extends Controller
         $flow_list = (new FlowInfo())->getFlowList(['activity_key' => $operation_info['act_key']], ['flow_id']);
         $i = count($flow_list);
         foreach ($flow_list as  $value) {
-            if ($operation_info['flow_id'] == $value)
+            if ($operation_info['flow_id'] == $value['flow_id'])
                 break;
             $i--;
         }
@@ -380,7 +380,7 @@ class ApplyDataController extends Controller
     public function sendSMS(Request $request)
     {
         $admin_temp = $request->get('admin_temp');
-        //$sms = $request->get('sms');
+        $sms = $request->get('sms');
         $flow_id = explode(',', $request->get('flow_id'));
         $enroll_id = $request->get('enroll_id');
         $static_var = $request->get('static_var');
@@ -408,7 +408,7 @@ class ApplyDataController extends Controller
             ], 400);
 
         //加入队列, 若然有字数限制则将注释去除
-        //$content = $sms['content'];
+        $content = $sms['content'];
         $sms_id = $admin_temp['sms_id'];
         $sms_free_sign_name = $admin_temp['sms_free_sign_name'];
         $vars = [];
@@ -422,14 +422,16 @@ class ApplyDataController extends Controller
                 $vars[$k] = $v;
             }
 
-            $this->dispatch(new SendSms($value['contact'], $vars, $sms_free_sign_name, $sms_id, $author_id, $author_pid));
+            $this->dispatch(
+                new SendSms($value['contact'], $vars, $sms_free_sign_name, $sms_id, $author_id, $author_pid, $content)
+            );
         }
         return response()->json(['status' => 1, 'message' => '发送任务已进入队列，如有失败请重新尝试'], 200);
     }
 
     public function getHistory()
     {
-        $res = SmsHistory::select('content')->orderBy('created_at', 'desc')->get();
+        $res = SmsHistory::select('*')->orderBy('created_at', 'desc')->get();
         return $res;
     }
 

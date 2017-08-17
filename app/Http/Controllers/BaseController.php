@@ -18,8 +18,4 @@ class BaseController extends Controller
     {
         //
     }
-
-    public function Test(Request $request) {
-        return [1];
-    }
 }

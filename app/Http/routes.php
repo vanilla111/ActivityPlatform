@@ -35,6 +35,7 @@ Route::get('/test', 'BaseController@Test');
 
     Route::group(['middleware' => 'client.change', 'prefix' => 'api'], function () {
         //超级管理员
+        Route::post('admin/smscharge', 'Admin\OrgController@chargeSms');
         Route::resource('admin/org', 'Admin\OrgController');
         Route::resource('admin/smstemp', 'Admin\SmsTempController');
         //组织管理员

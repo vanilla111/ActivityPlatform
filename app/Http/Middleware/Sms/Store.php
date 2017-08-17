@@ -16,7 +16,6 @@ class Store
      */
     public function handle($request, Closure $next)
     {
-        //$variables = '{"name":"${full_name}","department":"\u7ea2\u5ca9\u7f51\u6821"}';
         $require = ['temp_name', 'admin_temp_id', 'content', 'variables'];
         $temp_info = $request->only($require);
         $error_mes = [];
@@ -43,7 +42,7 @@ class Store
             return response()->json(['status' => 0, 'message' => '该模版好像不存在，换一个看看吧'], 400);
 
         //前台传递的变量对
-        $var = json_decode($temp_info['variables'], true);
+        $var = $temp_info['variables'];
 
         $sms_var = explode(',', $admin_temp['sms_variables']);
         if (count($var) != count($sms_var))
@@ -61,18 +60,18 @@ class Store
 
         $dynamic_var = unserialize($admin_temp['dynamic_variables']);
         $flag = false;
-        $pattern = '/\${\w*}/';
         if (!$dynamic_var || empty($dynamic_var)) {
             //若没有设置动态变量,跳过检查，视为静态短信模板
-            $flag = false;
+            $type = 0;
         } else {
-            //若设置了动态变量，检查前台所给变量中是否使用了动态变量，即是否检查是否是动态短信
+            //若设置了动态变量，检查前台所给变量中是否使用了动态变量，即检查是否是动态短信
             $dy_var = [];
+            $pattern = '/\${\W*}/';
             foreach ($var as $k => $v) {
                 foreach ($dynamic_var as $i => $j) {
                     if (isset($dynamic_var[$i][$v])) {
-                        //$dy_var[$i] = substr($v, 2, -1);
                         $dy_var[$i] = $v;
+                        $type = 1;
                         $flag = true;
                     }
                 }
@@ -81,31 +80,19 @@ class Store
                         'status' => 0,
                         'message' => $k . '赋值失败，请勿赋值类似 ${xxx} 的值'
                     ], 400);
-                else
-                    $dy_var[$k] = $v;
-            }
-//            $pattern = '/\${\w*}/';
-//            preg_match_all($pattern, $admin_temp['sms_temp'], $m);
-//
-//            if (empty($m) || !$m)
-//                $flag = false;
-//            else {
-//                $dy_var = [];
-//                foreach ($m[0] as $k => $v) {
-//                    foreach ($dynamic_var as $i => $j) {
-//                        if (isset($dynamic_var[$i][$v])) {
-//                            $dy_var[$v] = substr($v, 2, -1);
-//                            $flag = true;
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
 
-            $type = $flag ? 1 : 0;
+                if (mb_strlen($v) >= 15)
+                    return response()->json([
+                        'status' => 0,
+                        'message' => $k . '赋值失败，请将长度控制在15字符以内'
+                    ], 400);
+
+                $dy_var[$k] = $v;
+                $flag = false;
+            }
         }
 
-        $request->attributes->add(compact('var'));
+        //$request->attributes->add(compact('var'));
         $request->attributes->add(compact('type'));
         $request->attributes->add(compact('dy_var'));
         $request->attributes->add(compact('admin_temp'));

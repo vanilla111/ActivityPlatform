@@ -32,7 +32,7 @@ class SendSms extends Job implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($phone, $vars, $smsSignName, $smsId, $author_id, $author_pid, $content = '')
+    public function __construct($phone,array $vars, $smsSignName, $smsId, $author_id, $author_pid, $content = '')
     {
         $this->phoneNum = $phone;
         $this->variables = $vars;
@@ -50,12 +50,16 @@ class SendSms extends Job implements ShouldQueue
      */
     public function handle()
     {
+        //计算短信的长度
+        foreach ($this->variables as $key => $var)
+            $this->content = str_replace_first('${' . $key . '}', $var, $this->content);
+        $num = ceil(mb_strlen($this->content) / 70);
         if ($this->authorPid <= 0)
             $sms_num = SmsNum::where('admin_id', $this->authorId)->first();
         else
             $sms_num = SmsNum::where('admin_id', $this->authorPid)->first();
 
-        if ($sms_num['sms_num'] - 1 < 0)
+        if ($sms_num['sms_num'] - $num < 0)
             return ;
 
         //发送短信
@@ -83,7 +87,7 @@ class SendSms extends Job implements ShouldQueue
                     'msg' => $result_arr['result']['msg'],
                     'model' => $result_arr['result']['model'],
                 ];
-                $sms_num->decrement('sms_num');
+                $sms_num->decrement('sms_num', $num);
             }
         } else {
             //认为发送失败

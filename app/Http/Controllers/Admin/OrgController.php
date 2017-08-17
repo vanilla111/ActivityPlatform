@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\ActAdmin;
+use App\Models\Sms;
+use App\Models\SmsNum;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redis;
 
 class OrgController extends Controller
 {
+    private $admin_ip = "act.admin.ip:";
+
     public function __construct()
     {
-        $this->middleware('admin.base')->only(['index', 'store', 'show', 'update', 'destroy']);
+        $this->middleware('admin.base')->only(['index', 'store', 'show', 'update', 'destroy', 'chargeSms']);
     }
 
     /**
@@ -30,6 +35,46 @@ class OrgController extends Controller
             'message' => 'success',
             'data' => $admin_list
         ], 200);
+    }
+
+
+    /**
+     * 短信充值
+     * @param $request
+     * @return json
+     */
+    public function chargeSms(Request $request)
+    {
+        //限制接口调用时间间隔 3s
+        $client_ip = $request->getClientIp();
+        $key = $this->admin_ip . $client_ip;
+        if (Redis::exists($key))
+            return response()->json(['status' => 0, 'message' => '该接口限制3s调用一次'], 400);
+        else {
+            Redis::set($key, 1);
+            //设置3秒过期时间
+            Redis::expire($key, 3);
+        }
+        $require = ['admin_id', 'sms_num'];
+        $info = $request->only($require);
+        if (!is_numeric($info['sms_num']))
+            return response()->json(['status' => 0, 'message' => 'sms_num需为整数'], 400);
+        $admin = ActAdmin::where('admin_id', $info['admin_id'])
+            ->where('pid', '<=', 0)
+            ->first();
+        if (!$admin)
+            return response()->json(['status' => 0, 'message' => '只可为管理员账号充值'], 400);
+
+        $admin_sms_num = SmsNum::where('admin_id', $info['admin_id'])->select('*')->first();
+
+        if ($admin_sms_num)
+            $admin_sms_num->increment('sms_num', $info['sms_num']);
+        else {
+            $data = ['admin_id' => $info['admin_id'], 'sms_num' => $info['sms_num']];
+            SmsNum::create($data);
+        }
+
+        return response()->json(['status' => 1, 'message' => 'success'], 200);
     }
 
     /**

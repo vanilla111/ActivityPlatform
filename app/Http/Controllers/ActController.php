@@ -34,10 +34,8 @@ class ActController extends Controller
         $sort = @ $info['sort'] ? : 'desc';
         $per_page = @ $info['per_page'] ? : 10;
 
-        //TODO 返回已报名人数信息
-
         //初始化查询条件
-        $need = ['activity_id', 'activity_name', 'start_time', 'created_at', 'updated_at', 'status'];
+        $need = ['activity_id', 'activity_name','num_limit', 'current_num', 'start_time', 'created_at', 'updated_at', 'status'];
         $condition['eq']['author_id'] = $author_id;
         $condition['sort']['sortby'] = $sortby;
         $condition['sort']['sort'] = $sort;
