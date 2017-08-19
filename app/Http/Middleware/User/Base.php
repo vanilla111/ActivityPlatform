@@ -19,7 +19,7 @@ class Base
             return response()->json([
                 'status' => 0,
                 'message' => '请先登录',
-                'next_api' => '/api/activity/user/login',
+                'next_api' => '/api/user/login',
                 'method' => 'post'
             ], 403);
 

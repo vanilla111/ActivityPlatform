@@ -49,7 +49,8 @@ class UserController extends Controller
         $user_info['gender'] = $stu_info['data']['gender'];
         $user_info['grade'] = $stu_info['data']['grade'];
         $user_info['full_name'] = $stu_info['data']['name'];
-        $user_info['college'] = $stu_info['data']['collage'];
+        $user_info['college'] = $stu_info['data']['college'];
+        //return $stu_info;
         if(!UserData::create($user_info))
             return response()->json(['status' => 0, 'message' => '登录失败，请重新尝试登录'], 400);
 
@@ -195,7 +196,7 @@ class UserController extends Controller
         $info = $request->only($allow);
 
         //有关参数初始化
-        $info['per_page'] = $info['per_page'] ? : 5;
+        $info['per_page'] = $info['per_page'] ? : 10;
         $info['sortby']   = $info['sortby'] ? : 'created_at';
         $info['sort']     = $info['sort'] ? : 'desc';
         $info['user_id']  = $request->get('user_id');

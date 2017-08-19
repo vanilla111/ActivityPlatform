@@ -70,8 +70,6 @@ class ApplyData extends Model
             else
                 $condition['eq']['current_step'] = $info['current_step'];
         }
-        if (isset($info['college']))
-            $condition['eq']['college'] = $info['college'];
         if (isset($info['gender']))
             $condition['eq']['gender'] = $info['gender'];
         if (isset($info['act_key']))
@@ -84,6 +82,8 @@ class ApplyData extends Model
             $condition['vague']['full_name'] = $info['name'];
         if (isset($info['stu_code']))
             $condition['vague']['stu_code'] = $info['stu_code'];
+        if (isset($info['college']))
+            $condition['vague']['college'] = $info['college'];
 
         $condition['sort']['sort'] = $info['sort'];
         $condition['sort']['sortby'] = $info['sortby'];

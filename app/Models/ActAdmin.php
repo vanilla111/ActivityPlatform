@@ -30,4 +30,9 @@ class ActAdmin extends Authenticatable
     {
         return $this->where($condition)->update($message);
     }
+
+    public function hasOneSmsNum()
+    {
+        return parent::hasOne('App\Models\SmsNum', 'admin_id', 'admin_id');
+    }
 }

@@ -29,7 +29,7 @@ class Enroll
             return response()->json([
                 'status' => 0,
                 'message' => '用户异常，请重新登录',
-                'next_api' => '/api/activity/user/login',
+                'next_api' => '/api/user/login',
                 'method' => 'post'
             ], 403);
 
@@ -38,7 +38,7 @@ class Enroll
             return response()->json([
                 'status' => 0,
                 'message' => '个人联系方式未填写，无法完成报名',
-                'next_api' => '/api/activity/user',
+                'next_api' => '/api/user/{stu_code}',
                 'method' => 'put'
             ], 403);
 

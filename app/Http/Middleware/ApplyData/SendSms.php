@@ -100,7 +100,7 @@ class SendSms
         if (empty($sms_num) || count($enroll_id) > $sms_num['sms_num'])
             return response()->json([
                 'status' => 0,
-                'message' => '剩余短信条数不足（如果短信内容超过76字，按两条或者更高计算)'
+                'message' => '剩余短信条数不足（如果短信内容超过70字，按两条或者更高计算)'
             ], 400);
 
         //准备发送短信必需的内容

@@ -11,7 +11,7 @@ class Sms extends Model
 
     protected $primaryKey = 'temp_id';
 
-    protected $fillable = ['author_id', 'temp_name', 'admin_temp_id', 'content', 'variables', 'status', 'type'];
+    protected $fillable = ['author_id', 'temp_name', 'admin_temp_id', 'content', 'variables', 'status', 'type', 'was_test'];
 
     protected $hidden = ['status'];
 

@@ -13,6 +13,7 @@ class ActController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('act.index')->only('index');
         $this->middleware('act.base')->only(['update', 'startAct', 'endAct']);
         $this->middleware('act.store')->only('store');
         $this->middleware('act.variables')->only(['update', 'store']);
@@ -134,9 +135,9 @@ class ActController extends Controller
         //检查是否有该活动
         $act = new ActDesign();
         $condition = ['activity_id' => $act_key];
-        $need = ['author_id', 'num_limit', 'current_num', 'current_flow', 'activity_name',
+        $need = ['author_id', 'num_limit', 'current_num', 'activity_name',
             'time_description', 'summary', 'start_time', 'end_time', 'created_at'];
-        if (!$res = $act->getActInfo($condition, $need))
+        if (!$res = $act->getActInfoAndFlow($condition, $need))
             return response()->json(['status' => 0, 'message' => '获取详细信息失败'], 404);
 
         //检查活动所有者是否与token一致
@@ -158,13 +159,14 @@ class ActController extends Controller
     public function update(Request $request, $act_key)
     {
         $act = new ActDesign();
-        $res = $act->getActInfo(['activity_id' => $act_key], '*');
+        $res = ActDesign::find($act_key);
 
         if (strtotime($res['start_time']) < time())
             //return response()->json(['status' => 0, 'message' => '由于活动已经开始，仅可修改活动的最大人数限制']);
-            $allow = ['max_num', 'time_description', 'summary'];
+            $allow = ['max_num', 'time_description', 'summary', 'end_time', 'location'];
         else
             $allow = ['activity_name', 'summary', 'start_time', 'end_time', 'max_num', 'location', 'time_description'];
+
         $info = $request->only($allow);
         $info['num_limit'] = $info['max_num'];
         unset($info['max_num']);
@@ -175,10 +177,10 @@ class ActController extends Controller
 
         $update_info = unset_empty($info);
 
-        if (!$act->updateActInfo(['activity_id' => $act_key],$update_info))
+        if (!$res->update($update_info))
             return response()->json(['status' => 0, 'message' => '修改信息失败'], 400);
 
-        return response()->json(['status' => 0, 'message' => '信息修改成功'], 201);
+        return response()->json(['status' => 1, 'message' => '信息修改成功'], 201);
     }
 
     public function startAct($act_key)
@@ -221,26 +223,4 @@ class ActController extends Controller
         return response()->json(['status' => 1, 'message' => '活动删除成功'], 200);
     }
 
-
-    /**
-     * 暂时弃用
-     * @param $act_info
-     * @return mixed
-     */
-    private function getActKey($act_info)
-    {
-        //生成一个活动关键字，暂时定为与表的activity_id 相同
-        return $act_info;
-    }
-
-    /**
-     * 暂时弃用
-     * @param $act_info
-     * @return int
-     */
-    private function getActSecret($act_info)
-    {
-        //生成活动的密钥，暂时使用 time() 代替
-        return time();
-    }
 }

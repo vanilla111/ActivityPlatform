@@ -52,6 +52,7 @@ class Kernel extends HttpKernel
         'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
         'client.change' => \App\Http\Middleware\Auth::class,
         'auth.info' => \App\Http\Middleware\AuthInfo::class,
+        'act.index' => \App\Http\Middleware\Act\Index::class,
         'act.base' => \App\Http\Middleware\Act\Base::class,
         'act.variables' => \App\Http\Middleware\Act\Variables::class,
         'act.store' => \App\Http\Middleware\Act\Store::class,

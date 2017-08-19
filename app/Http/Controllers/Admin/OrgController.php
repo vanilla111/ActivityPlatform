@@ -28,7 +28,11 @@ class OrgController extends Controller
      */
     public function index()
     {
-        $admin_list = ActAdmin::where('pid', 0)->orderBy('created_at', 'desc')->get();
+        $admin_list = ActAdmin::where('pid', 0)
+            ->orderBy('created_at', 'desc')->get();
+
+        foreach ($admin_list as $key => $value)
+           $value->sms_num = $value->hasOneSmsNum()->select('sms_num')->first()['sms_num'];
 
         return response()->json([
             'status' => 1,
@@ -55,6 +59,7 @@ class OrgController extends Controller
             //设置3秒过期时间
             Redis::expire($key, 3);
         }
+
         $require = ['admin_id', 'sms_num'];
         $info = $request->only($require);
         if (!is_numeric($info['sms_num']))
@@ -122,6 +127,7 @@ class OrgController extends Controller
     public function show($id)
     {
         $admin = ActAdmin::where('admin_id', $id)->where('pid', '>=', 0)->first();
+        $admin->sms_num = $admin->hasOneSmsNum()->select('sms_num')->first()['sms_num'];
 
         return response()->json([
             'status' => 1,
@@ -177,6 +183,6 @@ class OrgController extends Controller
      */
     public function destroy($id)
     {
-        ActAdmin::where('admin_id', $id)->delete();
+        //ActAdmin::where('admin_id', $id)->delete();
     }
 }

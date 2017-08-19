@@ -16,7 +16,7 @@ class Store
      */
     public function handle($request, Closure $next)
     {
-        $require = ['temp_name', 'admin_temp_id', 'content', 'variables'];
+        $require = ['temp_name', 'admin_temp_id', 'variables'];
         $temp_info = $request->only($require);
         $error_mes = [];
         if (empty($temp_info['temp_name']))

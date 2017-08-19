@@ -55,6 +55,7 @@ class EnrollController extends Controller
             'wx_avatar' => $user_info['avatar'],
             'gender' => $stu_info['gender'],
             'college' => $stu_info['collage'],
+            'grade' => $stu_info['grade']
         ];
 
         $user = UserData::updateOrCreate($attributes, $values);

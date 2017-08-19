@@ -43,9 +43,9 @@ class Variables
             if ($info['gender'] != '男' || $info['gender'] != "女")
                 array_push($error_mes, '性别参数有误');
 
-        if (!empty($info['college']))
-            if (!is_numeric($info['college']) || $info['college'] <= 0)
-                array_push($error_mes, '学院代号有误');
+//        if (!empty($info['college']))
+//            if (!is_numeric($info['college']) || $info['college'] <= 0)
+//                array_push($error_mes, '学院代号有误');
 
         if (!empty($info['flow_id']))
             if (!is_numeric($info['flow_id']) || $info['flow_id'] <= 0)

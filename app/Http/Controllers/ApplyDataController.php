@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendSms;
-use App\Models\ActAdmin;
 use App\Models\FlowInfo;
-use App\Models\Sms;
-use App\Models\SmsHistory;
 use Illuminate\Http\Request;
 use App\Models\ApplyData;
 use App\Models\ActDesign;
@@ -16,7 +13,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use JWTAuth;
-use Flc\Alidayu\Support;
 
 class ApplyDataController extends Controller
 {
@@ -24,7 +20,7 @@ class ApplyDataController extends Controller
     {
         $this->middleware('data.actkey')->only(['index']);
         $this->middleware('data.enrollid')->only(['show', 'update', 'destroy']);
-        $this->middleware('data.flowid')->only(['store', 'update', 'operation', 'isSendSmsAndUpgrade']);
+        $this->middleware('data.flowid')->only(['store', 'operation', 'isSendSmsAndUpgrade']);
         $this->middleware('data.base')->only(['index', 'store', 'show', 'update', 'destroy']);
         $this->middleware('data.index')->only(['index']);
         $this->middleware('data.store')->only(['store']);
@@ -41,7 +37,8 @@ class ApplyDataController extends Controller
      */
     public function index(Request $request)
     {
-        $allow = ['page', 'per_page', 'sortby', 'sort', 'act_key', 'flow_id', 'college', 'gender', 'name', 'stu_code', 'was_send_sms'];
+        $allow = ['page', 'per_page', 'sortby', 'sort', 'act_key',
+            'flow_id', 'college', 'gender', 'name', 'stu_code', 'was_send_sms'];
         $info = $request->only($allow);
 
         //有关参数初始化
@@ -56,7 +53,6 @@ class ApplyDataController extends Controller
             'contact', 'college', 'gender', 'score', 'evaluation'];
 
         //查询
-        //return [is_array($info['current_step'])];
         $new_info = unset_empty($info);
         $data_m = new ApplyData();
         $res = $data_m->getApplyDataList($new_info, $need);
@@ -188,29 +184,9 @@ class ApplyDataController extends Controller
      */
     public function update(Request $request, $enroll_id)
     {
-        $temp = $request->get('apply_info');
-        $act_name = $request->get('act_name');
-        $flow_name = $request->get('flow_info')['flow_name'];
-        $apply_info = $temp[0];
-
         //着重更新分数和评价字段
         $allow = ['college', 'contact', 'score', 'evaluation'];
         $info = $request->only($allow);
-
-        $score = array();
-        $evaluation = array();
-
-        //如果已经有前面阶段的评分或评价，先反序列化
-        if (!empty($apply_info['score']))
-            @ $score = unserialize($apply_info['score']);
-        if (!empty($apply_info['evaluation']))
-            @ $evaluation = unserialize($apply_info['evaluation']);
-
-        $sign = $act_name. '[' . $flow_name . ']';
-        $score[$apply_info['current_step']] = [$sign => $info['score']];
-        $evaluation[$apply_info['current_step']] = [$sign => $info['evaluation']];
-        $info['score'] = serialize($score);
-        $info['evaluation'] = serialize($evaluation);
 
         //去除字段为空的键值对
         $update_info = unset_empty($info);
@@ -360,7 +336,7 @@ class ApplyDataController extends Controller
         $new_flow = $flow_list[$i - 1];
         $enroll_id = explode(',', $operation_info['enroll_id']);
         foreach ($enroll_id as $value) {
-            $this->dispatch(new ChangeStep($value, $act_key, $new_flow));
+            $this->dispatch(new ChangeStep($value, $act_key, $new_flow['flow_id']));
         }
 
         return response()->json(['status' => 1, 'message' => '申请已进入队列，如有失败请求，请重新尝试'], 202);
@@ -375,7 +351,6 @@ class ApplyDataController extends Controller
      * 准备发送短信的必要信息
      * 加入队列为选中的个人信息发送短信
      * 如果有后续流程，默认不升阶
-     * 被关联流程全员发送
      */
     public function sendSMS(Request $request)
     {
@@ -429,13 +404,12 @@ class ApplyDataController extends Controller
         return response()->json(['status' => 1, 'message' => '发送任务已进入队列，如有失败请重新尝试'], 200);
     }
 
-    public function getHistory()
+    public function getCSV()
     {
-        $res = SmsHistory::select('*')->orderBy('created_at', 'desc')->get();
-        return $res;
+        //
     }
 
-    public function getCSV()
+    public function getExcel()
     {
         //
     }

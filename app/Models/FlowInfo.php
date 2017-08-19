@@ -12,7 +12,7 @@ class FlowInfo extends Model
     protected $primaryKey = 'flow_id';
 
     protected $fillable = ['activity_key', 'flow_name', 'type',
-        'location', 'sms_temp_id', 'score', 'evaluation', 'correlation', 'lock', 'time_description',
+        'location', 'sms_temp_id', 'score', 'evaluation', 'time_description',
         'start_time', 'end_time'];
 
     public function getFlowInfo($condition, $need)
@@ -25,7 +25,7 @@ class FlowInfo extends Model
         return $this->where('status', '>=', 0)
             ->where($condition)
             ->select($need)
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', 'desc')
             ->get();
     }
 

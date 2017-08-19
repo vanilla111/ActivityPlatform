@@ -35,4 +35,9 @@ class AdminSmsTemp extends Model
             ->select($need)
             ->first();
     }
+
+    public function getDynamicVariablesAttribute($value)
+    {
+        return unserialize($value);
+    }
 }

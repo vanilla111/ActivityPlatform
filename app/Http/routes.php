@@ -30,7 +30,7 @@ Route::get('/test', 'BaseController@Test');
     Route::group(['middleware' => ['web', 'WXAuth'], 'prefix' => 'wx'], function () {
         Route::get('/', function () { return view('welcome'); });
         Route::get('userInfo', 'WeiXin\EnrollController@getUserInfo');
-        Route::get('enroll', 'WeiXin\EnrollController@enroll');
+        Route::post('enroll', 'WeiXin\EnrollController@enroll');
     });
 
     Route::group(['middleware' => 'client.change', 'prefix' => 'api'], function () {
@@ -62,12 +62,13 @@ Route::get('/test', 'BaseController@Test');
             Route::resource('flow', 'FlowController', ['except' => ['create', 'edit']]);
             //申请信息
             Route::post('applydata/sendsms', 'ApplyDataController@sendSMS');
-            Route::get('applydata/history', 'ApplyDataController@getHistory');
+            Route::get('sms/history', 'SmsController@getHistory');
             Route::post('applydata/operation', 'ApplyDataController@operation');
+            Route::post('applydata/onekeyup', 'ApplyDataController@isSendSmsAndUpgrade');
             Route::resource('applydata', 'ApplyDataController', ['except' => ['create', 'edit']]);
             //短信
             Route::get('sms/templet', 'SmsController@getAdminSmsTemp');
-            //$api->post('activity/sms/testsms', 'SmsController@sendTestSms');
+            Route::post('sms/test', 'SmsController@sendTestSms');
             Route::resource('sms', 'SmsController', ['except' => ['create', 'edit']]);
         });
     });

@@ -14,9 +14,19 @@ class ActDesign extends Model
     protected $fillable = ['author_id', 'num_limit', 'activity_name', 'summary', 'time_description',
         'location', 'enroll_flow','status', 'start_time', 'end_time'];
 
-    public function getActInfo($condition = [], $need )
+    public function getActInfo($conditon = [], $need)
     {
-        return $this->where($condition)->select($need)->first();
+        return $this->where($conditon)->where('status', '>=', 0)->select($need)->first();
+    }
+
+    public function getActInfoAndFlow($condition = [], $need )
+    {
+        $res =  $this->where($condition)->select($need)->first();
+        $res['flowList'] = $this->find(1000)->hasManyFlow()
+            ->where('status', '>', 0)
+            ->get();
+
+        return $res;
     }
 
     public function getActInfoList($list, $need )
