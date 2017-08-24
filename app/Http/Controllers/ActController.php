@@ -185,7 +185,7 @@ class ActController extends Controller
 
     public function startAct($act_key)
     {
-        //将一个活动的status 设置为 1'
+        //将一个活动的status 设置为 1
         $act = new ActDesign();
         $update_info['status'] = 1;
         if (!$act->updateActInfo(['activity_id' => $act_key] ,$update_info))

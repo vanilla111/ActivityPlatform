@@ -28,7 +28,12 @@ Route::get('/test', 'BaseController@Test');
 |
 */
     Route::group(['middleware' => ['web', 'WXAuth'], 'prefix' => 'wx'], function () {
-        Route::get('/', function () { return view('welcome'); });
+        Route::get('/index', function () {
+            return view('wx_client/index');
+        });
+        Route::get('/choose', function () {
+            return view('wx_client/choose');
+        });
         Route::get('userInfo', 'WeiXin\EnrollController@getUserInfo');
         Route::post('enroll', 'WeiXin\EnrollController@enroll');
     });

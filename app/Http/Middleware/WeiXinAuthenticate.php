@@ -59,7 +59,6 @@ class WeiXinAuthenticate
             'avatar' => 'test'
         ];
         $request->session()->put('weixin.user', $user);
-        $request->attributes->add(compact('user'));
 
         $config = $this->load();
 

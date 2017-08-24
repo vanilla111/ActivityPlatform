@@ -1,0 +1,65 @@
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+body,
+html {
+  height: 100%;
+  width: 100%;
+}
+body,
+html,
+input,
+div,
+img,
+button,
+container {
+  padding: 0;
+  margin: 0;
+}
+.container {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background-image: url(../imgs/index_background.png);
+  background-size: 100% 100%;
+  overflow: hidden;
+}
+.input-background {
+  width: 7.33333333rem;
+  height: 2.50666667rem;
+  margin: 10.49333333rem auto 0.93333333rem;
+  background-image: url(../imgs/iphone.png);
+  background-size: 100% 100%;
+}
+.input-background .input-content {
+  width: 5.02666667rem;
+  height: 1rem;
+  margin: 1.08rem 0 0 1.52rem;
+  font-size: 0.58666667rem;
+  color: #666666;
+  background-color: #fffcf6;
+  border: none;
+  outline: none;
+}
+.button {
+  display: block;
+  width: 4.26666667rem;
+  height: 1.62666667rem;
+  margin: 0 auto;
+  background-image: url(../imgs/index_button.png);
+  background-size: 100% 100%;
+  background-color: transparent;
+  border: none;
+}
+.introuduce {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.4rem;
+  width: 2.8rem;
+  height: 0.4rem;
+  margin: auto;
+  line-height: 0.4rem;
+  font-size: 0.29333333rem;
+  color: #5fa762;
+}

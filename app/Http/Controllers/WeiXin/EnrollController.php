@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\WeiXin;
 
+use App\Models\DeptInfo;
 use App\Models\UserData;
 use App\Models\ActDesign;
 use App\Models\ApplyData;
@@ -24,6 +25,26 @@ class EnrollController extends Controller
     public function getUserInfo(Request $request)
     {
         $user_info = $request->session()->get("weixin.user");
+        //准备校级组织报名获得列表,投机写法
+//        $depts  = DeptInfo::where('dept_id', '<=', 36)->get();
+//        $dept_info = [];
+//        foreach ($depts as $key => $value) {
+//            $arr = explode("|", $value->dept_name);
+//            if (!isset($dept_info[$arr[0]]))
+//                $dept_info[$arr[0]] = [];
+//            array_push($dept_info[$arr[0]], $arr[1]);
+//        }
+//        return $dept_info;
+        $account_arr = ['红岩网校工作站', '校学生会', '科技联合会', '校团委各部室', '青年志愿者协会', '社团联合会', '大学生艺术团'];
+        $admin_id = [2, 3, 4, 5, 6, 7, 8];
+        $act_info = [];
+        $act_m = new ActDesign();
+        for ($i = 0; $i < count($admin_id); $i++) {
+            $condition['author_id'] = $admin_id[$i];
+            $condition['status'] = 1;
+            $need = ['activity_id', 'activity_name'];
+            $act_info[$account_arr[$i]] = $act_m->getActInfo($condition, $need);
+        }
         //首先查看本地数据库中是否有相应的信息
         $user_data_m = new UserData();
         $need = ['user_id',  'contact', 'stu_code', 'wx_nickname', 'wx_avatar', 'full_name'];
@@ -32,7 +53,7 @@ class EnrollController extends Controller
             return response()->json([
                 'status' => 1,
                 'message' => 'success',
-                'data' => $stu_info
+                'data' => ['stu_info' => $stu_info, 'act_info' => $act_info]
             ], 200);
 
         //用openid请求学生的详细信息
@@ -75,8 +96,9 @@ class EnrollController extends Controller
     {
         $require = ['act_key', 'contact'];
         $enroll_info = $request->only($require);
-        $enroll_info['user_id'] = $request->session()->get('user');
-        if (empty($enroll_info['user_id']))
+        $enroll_info['user'] = $request->session()->get('weixin.user');
+
+        if (empty($enroll_info['user']))
             return response()->json(['status' => 0, 'message' => '非法访问'], 400);
         if (empty($enroll_info['act_key']))
             return response()->json(['status' => 0, 'message' => 'act_key必需'], 400);
@@ -84,7 +106,7 @@ class EnrollController extends Controller
             return response()->json(['status' => 0, 'message' => 'contact必需'], 400);
         elseif (!check_phoneNum($enroll_info['contact']))
             return response()->json(['status' => 0, 'message' => 'contact格式有误'], 400);
-        if (!$user_info = UserData::where('user_id', $enroll_info['user_id'])->first())
+        if (!$user_info = UserData::where('wx_openid', $enroll_info['user']['openid'])->first())
             return response()->json(['status' => 0, 'message' => '未找到该用户'], 400);
 
         $user_id = $user_info['user_id'];
@@ -206,7 +228,7 @@ class EnrollController extends Controller
         return response()->json([
             'status' => 1,
             'message' => 'success'
-        ], 201);
+        ], 200);
     }
 
     private function send($url, $get = false)

@@ -19,7 +19,7 @@ class Base
         //解析token
         $token_info = JWTAuth::authenticate(JWTAuth::getToken());
 
-        if ($token_info['account'] != "hywx_web" || $token_info['out_of_dept'] != 1)
+        if ($token_info['account'] != "hywx_web")
             return response()->json([
                 'status' => 0,
                 'message' => '非法访问'

@@ -1,0 +1,141 @@
+* {
+  -webkit-overflow-scrolling: touch;
+  -webkit-tap-highlight-color: transparent;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+html,
+body,
+div,
+button,
+img,
+span,
+i,
+p {
+  padding: 0;
+  margin: 0;
+}
+.container {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background-image: url(../imgs/choose_background.png);
+  background-size: 100% 100%;
+  overflow: hidden;
+  overflow-y: scroll;
+  position: absolute;
+}
+.container::-webkit-scrollbar {
+  width: 0;
+}
+.title {
+  width: 5.06666667rem;
+  height: 1.06666667rem;
+  margin: 1.2rem auto 0;
+}
+.title .img-title {
+  width: 5.06666667rem;
+  height: 0.8rem;
+}
+.content {
+  width: 9.34666667rem;
+  margin: 0 auto;
+}
+.content .choose {
+  position: relative;
+  display: inline-block;
+  margin-top: 0.72rem;
+  width: 100%;
+  height: 3.25333333rem;
+  background-color: #ffffff;
+  -webkit-border-radius: 0.13333333rem;
+}
+.content .choose .select-one {
+  top: 0.36rem;
+}
+.content .choose .select-two {
+  top: 1.78666667rem;
+}
+.content .choose .select {
+  position: absolute;
+  width: 8.44rem;
+  height: 1.06666667rem;
+  left: 0;
+  right: 0;
+  margin: auto;
+  color: #7e7b74;
+  font-size: 0.37333333rem;
+  border-radius: 0.13333333rem;
+  overflow: hidden;
+  transition: height 0.2s ease-in;
+}
+.content .choose .select-sure {
+  width: 8.44rem;
+  height: 1.06666667rem;
+  background-color: #fffcf0;
+}
+.content .choose .select-sure em {
+  float: left;
+  margin-left: 0.34666667rem;
+  height: 1.06666667rem;
+  line-height: 1.06666667rem;
+  font-style: normal;
+}
+.content .choose .select-icon {
+  float: right;
+  height: 1.06666667rem;
+  margin-right: 0.26666667rem;
+  line-height: 1.06666667rem;
+  color: #fc8d5d;
+}
+.content .choose .select-more {
+  width: 8.44rem;
+  overflow: hidden;
+}
+.content .choose .select-more .select-part {
+  width: 100%;
+  height: 1.06666667rem;
+  box-sizing: border-box;
+  padding-left: 0.34666667rem;
+  line-height: 1.06666667rem;
+  background-color: #fffcf0;
+}
+.content .choose .add-height {
+  z-index: 2;
+}
+.content .more {
+  width: 3.74666667rem;
+  height: 0.54666667rem;
+  margin: 0.62666667rem auto 0;
+  line-height: 0.54666667rem;
+  font-size: 0.37333333rem;
+}
+.content .more .icon {
+  color: #fc8d5d;
+}
+.content .more .add {
+  color: #7e7b74;
+}
+.bottom {
+  width: 7.74666667rem;
+  height: 1.38666667rem;
+  margin: 2.73333333rem auto 0;
+}
+.bottom-button {
+  width: 3.53333333rem;
+  height: 1.38666667rem;
+  border: none;
+  background-size: 100% 100%;
+  background-color: transparent;
+}
+.bottom .previous {
+  float: left;
+  background-image: url(../imgs/previous.png);
+}
+.bottom .sure {
+  float: right;
+  background-image: url(../imgs/sure.png);
+}
