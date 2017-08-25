@@ -81,14 +81,14 @@ $('.more').addEventListener('touchstart', function () {
 $('.sure').addEventListener('touchstart', function () {
     ajax({
         method: 'get',
-        url: './activity/wx/userInfo',
+        url: '/activity/wx/userInfo',
         success: function success(res) {
             //console.log(res)
         }
     });
     ajax({
         method: 'post',
-        url: './activity/wx/enroll',
+        url: '/activity/wx/enroll',
         type: 'form',
         data: 'act_key=' + [1000] + '&contact=' + phone,
         success: function success(res) {
