@@ -80,6 +80,7 @@ class Kernel extends HttpKernel
         'sms.test' => \App\Http\Middleware\Sms\Test::class,
         'admin.base' => \App\Http\Middleware\Admin\Base::class,
         'child_account' => \App\Http\Middleware\Org\Base::class,
-        'WXAuth' => \App\Http\Middleware\WeiXinAuthenticate::class
+        'WXAuth' => \App\Http\Middleware\WeiXinAuthenticate::class,
+        'AllowOrigin' => \App\Http\Middleware\AccessControlAllowOrigin::class
     ];
 }

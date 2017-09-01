@@ -38,7 +38,7 @@ Route::get('/test', 'BaseController@Test');
         Route::post('enroll', 'WeiXin\EnrollController@enroll');
     });
 
-    Route::group(['middleware' => 'client.change', 'prefix' => 'api'], function () {
+    Route::group(['middleware' => ['AllowOrigin', 'client.change'], 'prefix' => 'api'], function () {
         //超级管理员
         Route::post('admin/smscharge', 'Admin\OrgController@chargeSms');
         Route::resource('admin/org', 'Admin\OrgController');
