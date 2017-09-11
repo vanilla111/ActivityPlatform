@@ -27,7 +27,7 @@ Route::get('/test', 'BaseController@Test');
 | kernel and includes session state, CSRF protection, and more.
 |
 */
-    Route::group(['middleware' => ['web', 'WXAuth'], 'prefix' => 'wx'], function () {
+    Route::group(['middleware' => ['web', 'WXAuth', 'AllowOrigin'], 'prefix' => 'wx'], function () {
         Route::get('/index', function () {
             return view('wx_client/index');
         });

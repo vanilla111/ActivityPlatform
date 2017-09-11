@@ -6,18 +6,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f967b642-eaf3-4a98-abde-feb3f782fc6a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/activity.iml" afterPath="$PROJECT_DIR$/.idea/activity.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/ApplyDataController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/ApplyDataController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/SmsController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/SmsController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/WeiXin/EnrollController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/WeiXin/EnrollController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/routes.php" afterPath="$PROJECT_DIR$/app/Http/routes.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Jobs/SendSms.php" afterPath="$PROJECT_DIR$/app/Jobs/SendSms.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Models/ActDesign.php" afterPath="$PROJECT_DIR$/app/Models/ActDesign.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Models/ApplyData.php" afterPath="$PROJECT_DIR$/app/Models/ApplyData.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.json" afterPath="$PROJECT_DIR$/composer.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/composer.lock" afterPath="$PROJECT_DIR$/composer.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/app.php" afterPath="$PROJECT_DIR$/config/app.php" />
     </list>
     <ignored path="activity.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -84,16 +74,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EnrollController.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/WeiXin/EnrollController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="38" column="22" lean-forward="false" selection-start-line="38" selection-start-column="22" selection-end-line="38" selection-end-column="22" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ActDesign.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Models/ActDesign.php">
           <provider selected="true" editor-type-id="text-editor">
@@ -104,7 +84,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ApplyDataController.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ApplyDataController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ApplyDataController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="429">
@@ -694,12 +674,12 @@
       <workItem from="1503567473189" duration="6162000" />
       <workItem from="1503637663144" duration="450000" />
       <workItem from="1504272035636" duration="482000" />
-      <workItem from="1505120348872" duration="7272000" />
+      <workItem from="1505120348872" duration="7654000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="455882000" />
+    <option name="totallyTimeSpent" value="456264000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -1086,16 +1066,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ApplyDataController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="429">
-          <caret line="432" column="13" lean-forward="true" selection-start-line="432" selection-start-column="13" selection-end-line="432" selection-end-column="13" />
-          <folding>
-            <element signature="e#40#61#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Middleware/ApplyData/FlowId.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1108,14 +1078,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="739">
-          <caret line="69" column="85" lean-forward="false" selection-start-line="69" selection-start-column="85" selection-end-line="69" selection-end-column="85" />
           <folding />
         </state>
       </provider>
@@ -1156,9 +1118,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/WeiXin/EnrollController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="38" column="22" lean-forward="false" selection-start-line="38" selection-start-column="22" selection-end-line="38" selection-end-column="22" />
+        <state relative-caret-position="134">
+          <caret line="37" column="8" lean-forward="false" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="8" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="739">
+          <caret line="69" column="85" lean-forward="false" selection-start-line="69" selection-start-column="85" selection-end-line="69" selection-end-column="85" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ApplyDataController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="429">
+          <caret line="432" column="13" lean-forward="true" selection-start-line="432" selection-start-column="13" selection-end-line="432" selection-end-column="13" />
+          <folding>
+            <element signature="e#40#61#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

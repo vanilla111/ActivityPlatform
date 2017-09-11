@@ -35,6 +35,7 @@ class EnrollController extends Controller
 //            array_push($dept_info[$arr[0]], $arr[1]);
 //        }
 //        return $dept_info;
+
         $account_arr = ['红岩网校工作站', '校学生会', '科技联合会', '校团委各部室', '青年志愿者协会', '社团联合会', '大学生艺术团'];
         $admin_id = [1, 3, 4, 5, 6, 7, 8];
         $act_info = [];
