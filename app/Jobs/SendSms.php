@@ -53,7 +53,7 @@ class SendSms extends Job implements ShouldQueue
         //计算短信的长度
         foreach ($this->variables as $key => $var)
             $this->content = str_replace_first('${' . $key . '}', $var, $this->content);
-        $num = ceil(mb_strlen($this->content) / 70);
+        $num = ceil(mb_strlen($this->content) > 70 ? mb_strlen($this->content) / 67 : 1);
         if ($this->authorPid <= 0)
             $sms_num = SmsNum::where('admin_id', $this->authorId)->first();
         else

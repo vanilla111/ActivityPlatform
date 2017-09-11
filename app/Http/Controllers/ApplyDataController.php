@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use JWTAuth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ApplyDataController extends Controller
 {
@@ -20,8 +21,8 @@ class ApplyDataController extends Controller
     {
         $this->middleware('data.actkey')->only(['index']);
         $this->middleware('data.enrollid')->only(['show', 'update', 'destroy']);
-        $this->middleware('data.flowid')->only(['store', 'operation', 'isSendSmsAndUpgrade']);
-        $this->middleware('data.base')->only(['index', 'store', 'show', 'update', 'destroy']);
+        $this->middleware('data.flowid')->only(['store', 'operation', 'isSendSmsAndUpgrade', 'uploadExcelFile']);
+        $this->middleware('data.base')->only(['index', 'store', 'show', 'update', 'destroy', 'uploadExcelFile']);
         $this->middleware('data.index')->only(['index']);
         $this->middleware('data.store')->only(['store']);
         $this->middleware('data.checkauth')->only(['store']);
@@ -412,6 +413,29 @@ class ApplyDataController extends Controller
     public function getExcel()
     {
         //
+    }
+    public function uploadExcelFile(Request $request)
+    {
+        $act_key = $request->get('act_key');
+        //
+        Excel::load($request->file('excel'), function($reader) use($act_key){
+            //文件默认按照姓名学号联系方式的格式存储
+           $data = $reader->noHeading()->all();
+            $insert_data = [];
+            for ($i = 0; $i < count($data); $i++) {
+                array_push($insert_data, array(
+                    'user_id' => -1,
+                    'activity_key' => $act_key,
+                    'full_name' => $data[$i][0],
+                    'stu_code' => intval($data[$i][1]),
+                    'contact' => intval($data[$i][2])
+                    ));
+            }
+            $data_m = new ApplyData();
+            $data_m->storeListData($insert_data);
+//            DB::table("apply_data")->insert($insert_data);
+            dd($insert_data);
+        });
     }
 
 }

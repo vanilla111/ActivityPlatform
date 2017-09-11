@@ -47,6 +47,11 @@ class ApplyData extends Model
             ->get();
     }
 
+    public function storeListData(array $insert_data)
+    {
+        return $this->insert($insert_data);
+    }
+
     public function applyDataExists($condition = [])
     {
         return $this->where($condition)->where('status', '>=', 0)->exists();

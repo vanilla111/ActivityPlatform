@@ -8,12 +8,14 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "flc/alidayu": "v2.0.5",
-        "maatwebsite/excel": "^2.1",
+        "maatwebsite/excel": "~2.1.0",
         "predis/predis": "^1.1",
         "barryvdh/laravel-ide-helper": "^2.2",
         "dingo/api": "1.0.*@dev",
         "caffeinated/modules": "^3.2",
-        "tymon/jwt-auth": "0.5.0"
+        "tymon/jwt-auth": "0.5.0",
+        "league/flysystem-aws-s3-v3": "1.0.18",
+        "league/flysystem": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

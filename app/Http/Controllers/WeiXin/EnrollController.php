@@ -43,7 +43,7 @@ class EnrollController extends Controller
             $condition['author_id'] = $admin_id[$i];
             $condition['status'] = 1;
             $need = ['activity_id', 'activity_name'];
-            $act_info[$account_arr[$i]] = $act_m->getActInfo($condition, $need);
+            $act_info[$account_arr[$i]] = $act_m->getActInfoArray($condition, $need);
         }
         //首先查看本地数据库中是否有相应的信息
         $user_data_m = new UserData();

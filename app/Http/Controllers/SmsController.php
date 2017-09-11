@@ -76,14 +76,6 @@ class SmsController extends Controller
     }
 
     /**
-     * 获取发送短信的历史信息
-     */
-    public function getSendSmsHistory(Request $request)
-    {
-        //
-    }
-
-    /**
      * 创建一个短信模版\
      *
      * @param  \Illuminate\Http\Request  $request

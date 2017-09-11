@@ -19,6 +19,11 @@ class ActDesign extends Model
         return $this->where($conditon)->where('status', '>=', 0)->select($need)->first();
     }
 
+    public function getActInfoArray($conditon = [], $need)
+    {
+        return $this->where($conditon)->where('status', '>=', 0)->select($need)->get();
+    }
+
     public function getActInfoAndFlow($condition = [], $need )
     {
         $res =  $this->where($condition)->select($need)->first();
@@ -29,7 +34,7 @@ class ActDesign extends Model
         return $res;
     }
 
-    public function getActInfoList($list, $need )
+    public function getActInfoList($list, $need)
     {
         return $this->whereIn('activity_id', $list)->select($need)->get();
     }
