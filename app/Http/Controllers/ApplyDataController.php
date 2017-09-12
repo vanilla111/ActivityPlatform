@@ -405,22 +405,58 @@ class ApplyDataController extends Controller
         return response()->json(['status' => 1, 'message' => '发送任务已进入队列，如有失败请重新尝试'], 200);
     }
 
-    public function getCSV()
+    public function getExcelFile(Request $request)
     {
-        //
+        $allow = ['sortby', 'sort', 'act_key',
+            'flow_id', 'college', 'gender', 'name', 'stu_code', 'was_send_sms'];
+        $info = $request->only($allow);
+
+        //有关参数初始化
+        $info['sortby']   = $info['sortby'] ? : 'updated_at';
+        $info['sort']     = $info['sort'] ? : 'desc';
+        $info['current_step'] = $info['flow_id'] ? explode(',', $info['flow_id']) : $request->get('current_flow');
+        $info['was_send_sms'] = $info['was_send_sms'] ? 1 : 0;
+        unset($info['flow_id']);
+
+        $need = ['stu_code', 'full_name', 'contact', 'college', 'gender', 'score', 'evaluation'];
+
+        //查询
+        $new_info = unset_empty($info);
+        $data_m = new ApplyData();
+        $res = $data_m->getApplyDataForExcel($new_info, $need);
+        if (!$res)
+            return response()->json([
+                'status'  => 0,
+                'message' => '获取信息列表失败'
+            ], 403);
+
+        $cell_data = [
+            [getConditionString($new_info)],
+            ['根据 ' . $info['sortby'] . ' ' . ($info['sort'] == 'desc' ? '降序' : '升序') . '排序'],
+            ['文件生成时间:' . date("Y-m-d H:i", time())],
+            ['', '学号', '姓名', '电话', '学院', '性别', '分数', '评价']
+        ];
+
+        foreach ($res as $key => $value) {
+            array_push($cell_data, array(
+               '', $value->stu_code, $value->full_name, $value->contact, $value->college, $value->gender, $value->score, $value->evaluation
+            ));
+        }
+
+        return Excel::create('申请信息',function($excel) use ($cell_data){
+            $excel->sheet('info', function($sheet) use ($cell_data){
+                $sheet->rows($cell_data);
+            });
+        })->export('xls');
     }
 
-    public function getExcel()
-    {
-        //
-    }
     public function uploadExcelFile(Request $request)
     {
         $act_key = $request->get('act_key');
-        //
+
         Excel::load($request->file('excel'), function($reader) use($act_key){
             //文件默认按照姓名学号联系方式的格式存储
-           $data = $reader->noHeading()->all();
+            $data = $reader->noHeading()->all();
             $insert_data = [];
             for ($i = 0; $i < count($data); $i++) {
                 array_push($insert_data, array(
@@ -431,11 +467,10 @@ class ApplyDataController extends Controller
                     'contact' => intval($data[$i][2])
                     ));
             }
-            $data_m = new ApplyData();
-            $data_m->storeListData($insert_data);
-//            DB::table("apply_data")->insert($insert_data);
-            dd($insert_data);
+            DB::table("apply_data")->insert($insert_data);
         });
+
+        return response()->json(['status' => 1, 'message' => '导入成功'], 200);
     }
 
 }

@@ -141,6 +141,33 @@ if (! function_exists('unset_empty')) {
     }
 }
 
+if (! function_exists('getConditionString')) {
+    function getConditionString($condition) {
+        $string = '筛选条件: ';
+        foreach ($condition as $key => $value) {
+            switch ($key) {
+                case 'act_key':{
+                    $string .= ' 活动ID:' . $value . ';';
+                }break;
+                case 'stu_code':{
+                    $string .= ' 学号检索:' . $value . ';';
+                }break;
+                case 'name':{
+                    $string .= ' 姓名检索:' . $value . ';';
+                }break;
+                case 'college':{
+                    $string .= ' 学院检索:' . $value . ';';
+                }break;
+                case 'gender':{
+                    $string .= ' 性别检索:' . $value . ';';
+                }break;
+            }
+        }
+
+        return $string;
+    }
+}
+
 if (! function_exists('is_all_letter')) {
     function is_all_letter($str)
     {

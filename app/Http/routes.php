@@ -67,11 +67,13 @@ Route::get('/test', 'BaseController@Test');
             Route::resource('flow', 'FlowController', ['except' => ['create', 'edit']]);
             //申请信息
             Route::post('applydata/sendsms', 'ApplyDataController@sendSMS');
-            Route::post('applydata/uploadexcel', 'ApplyDataController@uploadExcelFile');
+            Route::post('applydata/excel', 'ApplyDataController@uploadExcelFile');
+            Route::get('applydata/excel', 'ApplyDataController@getExcelFile');
             Route::post('applydata/operation', 'ApplyDataController@operation');
             Route::post('applydata/onekeyup', 'ApplyDataController@isSendSmsAndUpgrade');
             Route::resource('applydata', 'ApplyDataController', ['except' => ['create', 'edit']]);
             //短信
+            Route::get('sms/history', 'SmsHistoryController@getHistory');
             Route::get('sms/templet', 'SmsController@getAdminSmsTemp');
             Route::post('sms/test', 'SmsController@sendTestSms');
             Route::resource('sms', 'SmsController', ['except' => ['create', 'edit']]);

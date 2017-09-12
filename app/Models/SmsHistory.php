@@ -10,8 +10,14 @@ class SmsHistory extends Model
 
     protected $fillable = ['content', 'who_send', 'msg', 'code', 'sub_code', 'sub_msg', 'model', 'request_id', 'other_info'];
 
-    public function getContentAttribute($value)
+    public function getHistoryList($condition, $need, $page)
     {
-        return unserialize($value);
+        if (!isset($condition['code']) || $condition['code'] == 0)
+            $this->where($condition);
+        else
+            $this->where('who_send', $condition['who_send'])
+                ->where('code', '>', 0);
+
+        return $this->select($need)->orderBy('created_at', 'desc')->paginate($page['per_page']);
     }
 }

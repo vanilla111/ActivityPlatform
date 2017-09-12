@@ -36,6 +36,13 @@ class ApplyData extends Model
         return $sql->select($need)->paginate($info['per_page']);
     }
 
+    public function getApplyDataForExcel($info, $need)
+    {
+        $condition = $this->conditionBuilder($info);
+        $sql = $this->sqlBuilder($condition);
+        return $sql->select($need)->get();
+    }
+
     public function getApplyDataToSendSms($condition, $need)
     {
         return $this->whereIn('enroll_id', $condition['enroll_id'])
@@ -129,13 +136,13 @@ class ApplyData extends Model
         return $res;
     }
 
-    //获取的分数的访问器
-    public function getScoreAttribute($value) {
-        return unserialize($value);
-    }
-
-    //获取的分数的访问器
-    public function getEvaluationAttribute($value) {
-        return unserialize($value);
-    }
+//    //获取的分数的访问器
+//    public function getScoreAttribute($value) {
+//        return unserialize($value);
+//    }
+//
+//    //获取的分数的访问器
+//    public function getEvaluationAttribute($value) {
+//        return unserialize($value);
+//    }
 }
