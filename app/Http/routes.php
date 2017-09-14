@@ -27,13 +27,13 @@ Route::get('/test', 'BaseController@Test');
 | kernel and includes session state, CSRF protection, and more.
 |
 */
-Route::options('/', function() {
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS");
-    header("Access-Control-Allow-Headers: content-type,authorization");
-    return response(null, 204);
-});
-    Route::group(['middleware' => ['AllowOrigin', 'web', 'WXAuth'], 'prefix' => 'wx'], function () {
+//Route::options('/', function() {
+//    header("Access-Control-Allow-Origin: *");
+//    header("Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS");
+//    header("Access-Control-Allow-Headers: content-type,authorization");
+//    return response(null, 204);
+//});
+    Route::group(['middleware' => ['web', 'WXAuth'], 'prefix' => 'wx'], function () {
         Route::get('/index', function () {
             return view('wx_client/index');
         });
@@ -44,7 +44,7 @@ Route::options('/', function() {
         Route::post('enroll', 'WeiXin\EnrollController@enroll');
     });
 
-    Route::group(['middleware' => ['AllowOrigin', 'client.change'], 'prefix' => 'api'], function () {
+    Route::group(['middleware' => ['client.change'], 'prefix' => 'api'], function () {
         //超级管理员
         Route::post('admin/smscharge', 'Admin\OrgController@chargeSms');
         Route::resource('admin/org', 'Admin\OrgController');
