@@ -27,7 +27,7 @@ Route::get('/test', 'BaseController@Test');
 | kernel and includes session state, CSRF protection, and more.
 |
 */
-    Route::group(['middleware' => ['web', 'WXAuth', 'AllowOrigin'], 'prefix' => 'wx'], function () {
+    Route::group(['middleware' => ['AllowOrigin', 'web', 'WXAuth'], 'prefix' => 'wx'], function () {
         Route::get('/index', function () {
             return view('wx_client/index');
         });
@@ -58,7 +58,7 @@ Route::get('/test', 'BaseController@Test');
             Route::resource('user', 'UserController', ['except' => ['index', 'create', 'destroy', 'edit']]);
         });
 
-        Route::group(['middleware' => 'jwt.auth'], function () {
+        Route::group(['middleware' => ['AllowOrigin', 'jwt.auth']], function () {
             //活动
             Route::put('act/{act_key}/start', 'ActController@startAct')->where('act_key', '[0-9]+');
             Route::put('act/{act_key}/end', 'ActController@endAct')->where('act_key', '[0-9]+');
