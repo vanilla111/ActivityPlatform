@@ -34,13 +34,20 @@ class SmsController extends Controller
 
         if (!$res = Sms::whereIn('author_id', $author_id_arr)
             ->where('status', '>', '0')
-            ->select(['temp_id', 'temp_name', 'content', 'was_test'])
+            ->select(['temp_id', 'temp_name', 'content', 'was_test', 'variables', 'created_at'])
             ->orderBy('updated_at', 'desc')
-            ->first()
+            ->get()
         ) {
             return response()->json(['status' => 0, 'message' => '获取短信模版列表失败'], 404);
         }
 
+        foreach ($res as $key => $value) {
+            //return $value;
+            foreach ($value['variables'] as $k => $v) {
+                //return $value;
+                $value['content'] = str_replace_first('${' . $k . '}', $v, $value['content']);
+            }
+        }
         return response()->json(['status' => 1, 'message' => 'success', 'data' => $res], 200);
     }
 
