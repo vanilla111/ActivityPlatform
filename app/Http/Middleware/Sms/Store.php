@@ -58,7 +58,7 @@ class Store
                 ], 400);
         }
 
-        $dynamic_var = unserialize($admin_temp['dynamic_variables']);
+        $dynamic_var = $admin_temp['dynamic_variables'];
         $flag = false;
         if (!$dynamic_var || empty($dynamic_var)) {
             //若没有设置动态变量,跳过检查，视为静态短信模板

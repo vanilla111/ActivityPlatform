@@ -62,7 +62,6 @@ class SmsController extends Controller
 
         foreach ($res as $key) {
             @ $key['sms_variables'] = explode(',', $key['sms_variables']);
-            @ $key['dynamic_variables'] = unserialize($key['dynamic_variables']);
             foreach ($key['sms_variables'] as $k) {
                 $key['sms_temp'] = str_replace_first('***', '${' . $k . '}', $key['sms_temp']);
             }
