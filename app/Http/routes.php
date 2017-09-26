@@ -68,6 +68,7 @@ Route::get('/test', 'BaseController@Test');
             //活动
             Route::put('act/{act_key}/start', 'ActController@startAct')->where('act_key', '[0-9]+');
             Route::put('act/{act_key}/end', 'ActController@endAct')->where('act_key', '[0-9]+');
+            Route::get('act/flow', 'ActController@getActListAndFlow');
             Route::resource('act', 'ActController', ['except' => ['create', 'edit']]);
             //流程
             Route::resource('flow', 'FlowController', ['except' => ['create', 'edit']]);

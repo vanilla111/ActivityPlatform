@@ -6,3 +6,4 @@ Homestead.json
 .env
 .sms_provider
 /.idea
+.DS_Store

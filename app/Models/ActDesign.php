@@ -27,9 +27,23 @@ class ActDesign extends Model
     public function getActInfoAndFlow($condition = [], $need )
     {
         $res =  $this->where($condition)->select($need)->first();
-        $res['flowList'] = $this->find(1000)->hasManyFlow()
+        $res['flowList'] = $this->find($res['activity_id'])->hasManyFlow()
             ->where('status', '>', 0)
             ->get();
+
+        return $res;
+    }
+
+    public function getActListAndFlow($condition = [], $need)
+    {
+        $res = $this->where($condition)->where('status', '>', 0)->select($need)->orderBy('created_at', 'desc')->get();
+        foreach ($res as $key => $value) {
+            $res[$key]['flowlist'] = $value->find($value['activity_id'])
+                ->hasManyFlow()
+                ->select(['flow_id', 'flow_name'])
+                ->where('status', '>', 0)
+                ->get();
+        }
 
         return $res;
     }
@@ -94,6 +108,6 @@ class ActDesign extends Model
 
     public function hasManyFlow()
     {
-        return parent::hasMany('App\Models\FlowInfo', 'activity_key', 'activity_id');
+        return $this->hasMany('App\Models\FlowInfo', 'activity_key', 'activity_id');
     }
 }

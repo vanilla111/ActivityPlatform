@@ -54,6 +54,19 @@ class ActController extends Controller
         return response()->json(['status' => 1, 'message' => 'success', 'data' => $res], 200);
     }
 
+    public function getActListAndFlow(Request $request)
+    {
+        $auth_info = JWTAuth::decode(JWTAuth::getToken());
+        $author_id = $auth_info['sub'];
+        $condition = [
+            'author_id' => $author_id,
+        ];
+        $need = ['activity_id', 'summary', 'activity_name'];
+        $res = (new ActDesign())->getActListAndFlow($condition, $need);
+
+        return response()->json(['status' => 1, 'message' => 'success', 'data' => $res], 200);
+    }
+
     /**
      * 新建活动，保存该活动的信息
      *
