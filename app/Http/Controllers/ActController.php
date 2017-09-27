@@ -148,7 +148,7 @@ class ActController extends Controller
         //检查是否有该活动
         $act = new ActDesign();
         $condition = ['activity_id' => $act_key];
-        $need = ['author_id', 'num_limit', 'current_num', 'activity_name',
+        $need = ['activity_id', 'author_id', 'num_limit', 'current_num', 'activity_name',
             'time_description', 'summary', 'start_time', 'end_time', 'created_at'];
         if (!$res = $act->getActInfoAndFlow($condition, $need))
             return response()->json(['status' => 0, 'message' => '获取详细信息失败'], 404);
