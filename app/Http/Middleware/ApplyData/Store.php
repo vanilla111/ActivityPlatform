@@ -17,7 +17,7 @@ class Store
     {
         $info = $request->all();
         $error_mes = [];
-        $require = ['college', 'stu_code', 'password', 'contact'];
+        $require = ['stu_code', 'full_name', 'contact'];
         foreach ($require as $key) {
             if (empty($info[$key]))
                 array_push($error_mes, $key.'参数必需');

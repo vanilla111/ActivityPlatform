@@ -21,11 +21,11 @@ class Variables
         if (!empty($info['name'])) {
             if (is_all_letter($info['name']))
                 array_push($error_mes, '名字必须含有中文');
-            if (utf8_strlen($info['name']) > 8 || utf8_strlen($info['name']) < 2)
+            if (utf8_strlen($info['name']) > 16 || utf8_strlen($info['name']) < 2)
                 array_push($error_mes, '参数name长度有误');
         }
 
-        if (!empty($info['stu_code']) || !empty($info['password'])) {
+        if (!empty($info['stu_code']) && !empty($info['password'])) {
             $temp = verify($info['stu_code'], $info['password']);
             if ($temp['status'] != 200)
                 array_push($error_mes, '身份信息有误，请检查学号是否与身份证后六位相匹配');

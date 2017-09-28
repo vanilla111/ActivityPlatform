@@ -194,12 +194,14 @@ class UserController extends Controller
         //
         $allow = ['page', 'per_page', 'sortby', 'sort', 'name'];
         $info = $request->only($allow);
+        $need = ['stu_code'];
+        $user = (new UserData())->getUserInfo(['user_id', $request->get('user_id')], $need);
 
         //有关参数初始化
         $info['per_page'] = $info['per_page'] ? : 10;
         $info['sortby']   = $info['sortby'] ? : 'created_at';
         $info['sort']     = $info['sort'] ? : 'desc';
-        $info['user_id']  = $request->get('user_id');
+        $info['sut_code']  = $user->stu_code;
 
         $need = ['activity_key', 'act_name', 'current_step', 'status', 'score', 'evaluation', 'created_at'];
 
@@ -209,12 +211,6 @@ class UserController extends Controller
                 'status' => 0,
                 'message' => '申请历史获取失败'
             ], 400);
-
-        //return count($data);
-        for ($i = 0; $i < count($data); $i++) {
-            $data[$i]['score'] = unserialize($data[$i]['score']);
-            $data[$i]['evaluation'] = unserialize($data[$i]['evaluation']);
-        }
 
         return response()->json([
             'status' => 1,

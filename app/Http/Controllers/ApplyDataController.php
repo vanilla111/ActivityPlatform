@@ -102,38 +102,41 @@ class ApplyDataController extends Controller
                 'data'    => $applyData
             ], 400);
 
-        //检查本地是否有此学生，如果没有，则添加一条
-        $user_m = new UserData();
-        if (!$user = $user_m->getUserInfo(['stu_code' => $info['stu_code']], 'user_id')){
-            $user_info = [
-                'full_name' => $userInfo['name'],
-                'grade'     => $userInfo['grade'],
-                'gender'    => $userInfo['gender'],
-                'college'   => $info['college'],
-                'contact'   => $info['contact'],
-                'stu_code'  => $info['stu_code'],
-                'password'  => Hash::make($info['password'])
-            ];
-            if (!$new_user = $user_m->storeUserInfo($user_info))
-                return response()->json([
-                    'status'  => 0,
-                    'message' => '添加失败'
-                ], 403);
-        }
+//        //检查本地是否有此学生，如果没有，则添加一条
+//        $user_m = new UserData();
+//        if (!$user = $user_m->getUserInfo(['stu_code' => $info['stu_code']], 'user_id')){
+//            $user_info = [
+//                'full_name' => $userInfo['name'],
+//                'grade'     => $userInfo['grade'],
+//                'gender'    => $userInfo['gender'],
+//                'college'   => $info['college'],
+//                'contact'   => $info['contact'],
+//                'stu_code'  => $info['stu_code'],
+//                'password'  => Hash::make($info['password'])
+//            ];
+//            if (!$new_user = $user_m->storeUserInfo($user_info))
+//                return response()->json([
+//                    'status'  => 0,
+//                    'message' => '添加失败'
+//                ], 403);
+//        }
 
         //添加一条申请信息
         $apply_info = [
-            'user_id'      => $user['user_id'] ? : $new_user['user_id'],
+            'user_id'      => -1,
             'activity_key' => $act_key,
             'current_step' => $info['flow_id'],
-            'full_name'    => $userInfo['name'],
-            'grade'        => $userInfo['grade'],
-            'gender'       => $userInfo['gender'],
             'stu_code'     => $info['stu_code'],
             'contact'      => $info['contact'],
             'college'      => $info['college'],
             'act_name'     => $request->get('act_name')
         ];
+        if (!empty($userInfo)) {
+            $apply_info['full_name'] = $userInfo['name'];
+            $apply_info['grade'] = $userInfo['grade'];
+            $apply_info['gender'] = $userInfo['gender'];
+        }
+
         DB::beginTransaction();
         if (!$data_m->storeData($apply_info)) {
             return response()->json([
