@@ -18,10 +18,10 @@ class Variables
         $info = $request->all();
         $error_mes = [];
 
-        if (!empty($info['name'])) {
-            if (is_all_letter($info['name']))
+        if (!empty($info['full_name'])) {
+            if (is_all_letter($info['full_name']))
                 array_push($error_mes, '名字必须含有中文');
-            if (utf8_strlen($info['name']) > 16 || utf8_strlen($info['name']) < 2)
+            if (utf8_strlen($info['full_name']) > 16 || utf8_strlen($info['full_name']) < 2)
                 array_push($error_mes, '参数name长度有误');
         }
 
@@ -46,6 +46,10 @@ class Variables
 //        if (!empty($info['college']))
 //            if (!is_numeric($info['college']) || $info['college'] <= 0)
 //                array_push($error_mes, '学院代号有误');
+
+        if (isset($info['grade']))
+            if (!is_numeric($info['grade']))
+                array_push($error_mes, 'grade参数有误');
 
         if (!empty($info['flow_id']))
             if (!is_numeric($info['flow_id']) || $info['flow_id'] <= 0)

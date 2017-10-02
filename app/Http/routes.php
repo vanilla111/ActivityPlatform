@@ -77,6 +77,7 @@ Route::get('/test', 'BaseController@Test');
             Route::post('applydata/excel', 'ApplyDataController@uploadExcelFile');
             Route::get('applydata/excel', 'ApplyDataController@getExcelFile');
             Route::post('applydata/operation', 'ApplyDataController@operation');
+            Route::post('applydata/score', 'ApplyDataController@oneKeyUpdate');
             Route::post('applydata/onekeyup', 'ApplyDataController@isSendSmsAndUpgrade');
             Route::resource('applydata', 'ApplyDataController', ['except' => ['create', 'edit']]);
             //短信

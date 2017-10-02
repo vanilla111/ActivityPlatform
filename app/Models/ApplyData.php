@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ApplyData extends Model
 {
@@ -52,6 +53,61 @@ class ApplyData extends Model
             ->distinct('contact')
             ->select($need)
             ->get();
+    }
+
+    /**
+     * 一次性更新多个数据
+     * @param array $update_data
+     * @return bool
+     */
+    public function updateBatch(array $update_data)
+    {
+//        $update_data = [
+//          [
+//              'enroll_id' => 1,
+//              'activity_key' => 1000,
+//              'current_step' => 2,
+//              'score' => 89
+//          ],
+//            [
+//                'enroll_id' => 2,
+//                'activity_key' => 1000,
+//                'current_step' => 2,
+//                'score' => 99
+//            ]
+//        ];
+        if(empty($update_data))
+            return false;
+
+        $updateColumn = array_keys($update_data[0]);
+
+        //去除不能更新的部分
+        $referenceColumn = [];
+        foreach ($updateColumn as $k => $v) {
+            if ($v == 'enroll_id' || $v == 'activity_key' || $v == 'current_step') {
+                unset($updateColumn[$k]);
+                array_push($referenceColumn, $v);
+            }
+        }
+
+        $q = "UPDATE" . " " . $this->table . " SET ";
+
+        foreach ($updateColumn as $uColumn) {
+            $q .= $uColumn . " = CASE WHEN ";
+            foreach ($update_data as $data) {
+                foreach ($referenceColumn as $k => $v) {
+                    $q .= $v . "=" . $data[$v] . " AND ";
+                }
+                $q = substr($q, 0, strlen($q) - 4);
+                $q .= "THEN " . $data[$uColumn] . " WHEN ";
+            }
+            $q = substr($q, 0, strlen($q) - 5);
+            $q .= " ELSE " . $uColumn . " END, ";
+        }
+        $q = rtrim($q, ", ");
+
+        return DB::update($q);
+
     }
 
     public function storeListData(array $insert_data)

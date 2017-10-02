@@ -21,8 +21,8 @@ class ApplyDataController extends Controller
     {
         $this->middleware('data.actkey')->only(['index']);
         $this->middleware('data.enrollid')->only(['show', 'update', 'destroy']);
-        $this->middleware('data.flowid')->only(['store', 'operation', 'isSendSmsAndUpgrade', 'uploadExcelFile']);
-        $this->middleware('data.base')->only(['index', 'store', 'show', 'update', 'destroy', 'uploadExcelFile']);
+        $this->middleware('data.flowid')->only(['store', 'operation', 'isSendSmsAndUpgrade', 'uploadExcelFile', 'oneKeyUpdate']);
+        $this->middleware('data.base')->only(['index', 'store', 'show', 'update', 'destroy', 'uploadExcelFile', 'oneKeyUpdate']);
         $this->middleware('data.index')->only(['index']);
         $this->middleware('data.store')->only(['store']);
         $this->middleware('data.checkauth')->only(['store']);
@@ -79,7 +79,7 @@ class ApplyDataController extends Controller
     public function store(Request $request)
     {
         //允许接受的参数
-        $allow = ['college', 'stu_code', 'password', 'contact', 'flow_id'];
+        $allow = ['college', 'stu_code', 'password', 'contact', 'flow_id', 'full_name', 'grade', 'gender'];
         $info = $request->only($allow);
         $userInfo = $request->get('user_info');
         $act_key = $request->get('act_key');
@@ -129,10 +129,14 @@ class ApplyDataController extends Controller
             'stu_code'     => $info['stu_code'],
             'contact'      => $info['contact'],
             'college'      => $info['college'],
-            'act_name'     => $request->get('act_name')
+            'act_name'     => $request->get('act_name'),
+            //如果直接添加的话
+            'full_name'    => $info['full_name'],
+            'grade'        => $info['grade'],
+            'gender'       => $info['gender']
         ];
         if (!empty($userInfo)) {
-            $apply_info['full_name'] = $userInfo['name'];
+            $apply_info['full_name'] = $userInfo['full_name'];
             $apply_info['grade'] = $userInfo['grade'];
             $apply_info['gender'] = $userInfo['gender'];
         }
@@ -189,7 +193,7 @@ class ApplyDataController extends Controller
     public function update(Request $request, $enroll_id)
     {
         //着重更新分数和评价字段
-        $allow = ['college', 'contact', 'score', 'evaluation'];
+        $allow = ['full_name', 'stu_code', 'gender','college', 'contact', 'score', 'evaluation'];
         $info = $request->only($allow);
 
         //去除字段为空的键值对
@@ -206,6 +210,30 @@ class ApplyDataController extends Controller
             'status'  => 1,
             'message' => 'success'
         ], 201);
+    }
+
+    /**
+     * 一键更新申请信息的分数信息
+     */
+    public function oneKeyUpdate(Request $request)
+    {
+        $act_key = $request->get('act_key');
+        $flow_id = $request->get('flow_id');
+        $score_data = \GuzzleHttp\json_decode($request->get('scoreData'), true);
+        foreach ($score_data as $key => $value) {
+            $score_data[$key]['activity_key'] = $act_key;
+            $score_data[$key]['current_step'] = $flow_id;
+        }
+
+        $apply_data_m = new ApplyData();
+        if (!$res = $apply_data_m->updateBatch($score_data))
+            return response()->json(['status' => 0, 'message' => '数据为空或者更新失败'], 400);
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'success',
+            'data' => $res
+        ], 200);
     }
 
     /**
