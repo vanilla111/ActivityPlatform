@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Jobs\Job;
+use App\Models\ApplyData;
 use App\Models\SmsHistory;
 use App\Models\SmsNum;
 use Illuminate\Bus\Queueable;
@@ -26,13 +26,14 @@ class SendSms extends Job implements ShouldQueue
     private $smsFreeSignName;
     private $smsId;
     private $content;
+    private $enrollID;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($phone,array $vars, $smsSignName, $smsId, $author_id, $author_pid, $content = '')
+    public function __construct($phone,array $vars, $smsSignName, $smsId, $author_id, $author_pid, $content, $enroll_id)
     {
         $this->phoneNum = $phone;
         $this->variables = $vars;
@@ -41,6 +42,7 @@ class SendSms extends Job implements ShouldQueue
         $this->authorId = $author_id;
         $this->authorPid = $author_pid;
         $this->content = $content;
+        $this->enrollID = $enroll_id;
     }
 
     /**
@@ -88,6 +90,10 @@ class SendSms extends Job implements ShouldQueue
                     'model' => $result_arr['result']['model'],
                 ];
                 $sms_num->decrement('sms_num', $num);
+                //将申请信息标记为已发送
+                $apply_data = ApplyData::find($this->enrollID);
+                $apply_data->was_send_sms = 1;
+                $apply_data->save();
             }
         } else {
             //认为发送失败

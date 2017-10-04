@@ -140,7 +140,8 @@ class SmsController extends Controller
         $content = $sms_temp['content'];
         foreach ($sms_temp['variables'] as $key => $value)
             $content = str_replace_first('${' . $key . '}', $value, $content);
-        $num = ceil(mb_strlen($content) / 70);
+        $str_len = mb_strlen($content);
+        $num = ceil($str_len > 70 ? $str_len / 67 : 1);
 
         //短信余额查询
         if ($author_id_arr[1] <= 0) {

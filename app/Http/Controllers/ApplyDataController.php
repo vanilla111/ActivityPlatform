@@ -9,7 +9,6 @@ use App\Models\ApplyData;
 use App\Models\ActDesign;
 use App\Models\UserData;
 use App\Jobs\ChangeStep;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use JWTAuth;
@@ -219,7 +218,7 @@ class ApplyDataController extends Controller
     {
         $act_key = $request->get('act_key');
         $flow_id = $request->get('flow_id');
-        $score_data = \GuzzleHttp\json_decode($request->get('scoreData'), true);
+        $score_data = json_decode($request->get('scoreData'), true);
         foreach ($score_data as $key => $value) {
             $score_data[$key]['activity_key'] = $act_key;
             $score_data[$key]['current_step'] = $flow_id;
@@ -397,7 +396,7 @@ class ApplyDataController extends Controller
 
         $apply_data_m = new ApplyData();
         //从数据库获取数据
-        $need = ['contact'];
+        $need = ['enroll_id', 'contact'];
         if (!empty($dynamic_var)) {
             foreach ($dynamic_var as $value)
                 array_push($need, $value);
@@ -430,8 +429,8 @@ class ApplyDataController extends Controller
             }
 
             $this->dispatch(
-                new SendSms($value['contact'], $vars, $sms_free_sign_name, $sms_id, $author_id, $author_pid, $content)
-            );
+                new SendSms($value['contact'], $vars, $sms_free_sign_name, $sms_id, $author_id, $author_pid, $content, $value->enroll_id)
+            )->delay(5);
         }
         return response()->json(['status' => 1, 'message' => '发送任务已进入队列，如有失败请重新尝试'], 200);
     }
