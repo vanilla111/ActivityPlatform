@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Models\ApplyData;
 use App\Models\SmsHistory;
 use App\Models\SmsNum;
-use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,7 +14,7 @@ use Flc\Alidayu\Requests\AlibabaAliqinFcSmsNumSend;
 
 class SendSms extends Job implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels, Queueable;
+    use InteractsWithQueue, SerializesModels;
 
     private $SMS_CONFIG = ['app_key' => '23470529', 'app_secret' => '772387435d3db7f60a7ab9d6cbbf5f49'];
 
