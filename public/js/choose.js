@@ -19,7 +19,7 @@ if (data) data = data.act_info;
 
 //data = [[[{id: 1024,name:'web'},{id:111,name:'移动'},{id:2323,name:'视觉'}],[{id:123,name:'香梨'},{id:23,name:'红富士'}]]];
 
-$('.content-choose').addEventListener('touchend', function (e) {
+$('.content-choose').addEventListener('click', function (e) {
     var target = e.target;
     if (target.classList.contains('select-sure') || target.classList.contains('select-icon')) {
         target = target.parentElement.classList.contains('select') ? target : target.parentElement;
@@ -90,7 +90,7 @@ function changeIcon(nowEle, beforeEle) {
     beforeEle.classList.remove('icon-xiala-copy');
     beforeEle.classList.add('icon-xiala');
 }
-$('.more').addEventListener('touchstart', function () {
+$('.more').addEventListener('click', function () {
     if (oneRank > 4) return;
     var div = document.createElement('div');
     div.setAttribute('class', 'choose');
@@ -118,7 +118,7 @@ $('.more').addEventListener('touchstart', function () {
     oneRank++;
     twoRank++;
 });
-$('.sure').addEventListener('touchstart', function () {
+$('.sure').addEventListener('click', function () {
     if (postInfo) {
         postInfo = false;
         ajax({
