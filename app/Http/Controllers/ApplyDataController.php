@@ -430,7 +430,7 @@ class ApplyDataController extends Controller
 
             $this->dispatch(
                 new SendSms($value['contact'], $vars, $sms_free_sign_name, $sms_id, $author_id, $author_pid, $content, $value->enroll_id)
-            )->delay(5);
+            );
         }
         return response()->json(['status' => 1, 'message' => '发送任务已进入队列，如有失败请重新尝试'], 200);
     }

@@ -103,9 +103,9 @@ class EnrollController extends Controller
             return response()->json(['status' => 0, 'message' => '非法访问'], 400);
         if (empty($enroll_info['act_key']))
             return response()->json(['status' => 0, 'message' => 'act_key必需'], 400);
-        if (empty($enroll_info['contact']))
+        if (!isset($enroll_info['contact']))
             return response()->json(['status' => 0, 'message' => 'contact必需'], 400);
-        elseif (!check_phoneNum($enroll_info['contact']))
+        else if (!check_phoneNum($enroll_info['contact']))
             return response()->json(['status' => 0, 'message' => 'contact格式有误'], 400);
         if (!$user_info = UserData::where('wx_openid', $enroll_info['user']['openid'])->first())
             return response()->json(['status' => 0, 'message' => '未找到该用户'], 400);

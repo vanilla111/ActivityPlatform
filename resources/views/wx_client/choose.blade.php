@@ -14,10 +14,15 @@
             <div class="content-choose">
                 <div class="choose">
                     <div class="select select-one" rank="0">
-                        <div class="select-sure"><em>红岩</em><i class="select-icon iconfont icon-xiala"></i></div>
+                        <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
                         <div class="select-more">
-                            <p class="select-part" arr="0">红岩</p>
-                            <p class="select-part" arr="1">水果</p>
+                            <p class="select-part">红岩网校工作站</p>
+                            <p class="select-part">校学生会</p>
+                            <p class="select-part">科技联合会</p>
+                            <p class="select-part">校团委各部室</p>
+                            <p class="select-part">青年志愿者协会</p>
+                            <p class="select-part">社团联合会</p>
+                            <p class="select-part">大学生艺术团</p>
                         </div>
                     </div>
                     <div class="select select-two" rank="100">
@@ -29,10 +34,15 @@
                 </div>
                 <div class="choose">
                     <div class="select select-one" rank="1">
-                        <div class="select-sure"><em>红岩</em><i class="select-icon iconfont icon-xiala"></i></div>
+                        <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
                         <div class="select-more">
-                            <p class="select-part" arr="0">红岩</p>
-                            <p class="select-part" arr="1">桃子</p>
+                            <p class="select-part">红岩网校工作站</p>
+                            <p class="select-part">校学生会</p>
+                            <p class="select-part">科技联合会</p>
+                            <p class="select-part">校团委各部室</p>
+                            <p class="select-part">青年志愿者协会</p>
+                            <p class="select-part">社团联合会</p>
+                            <p class="select-part">大学生艺术团</p>
                         </div>
                     </div>
                     <div class="select select-two" rank="101">

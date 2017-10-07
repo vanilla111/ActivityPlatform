@@ -9,7 +9,7 @@
 <body>
     <container class="container">
         <div class="input-background">
-            <input type="text" class="input-content" value="17623659604">
+            <input type="number" value="17623659604" class="input-content">
         </div>
         <button class="button"></button>
         <p class="introuduce">©红岩网校工作站</p>

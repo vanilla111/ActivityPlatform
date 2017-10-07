@@ -75,6 +75,7 @@ class SendSms extends Job implements ShouldQueue
         $res = $client->execute($req);
 
         //记录日志
+        // TODO 完整记录发送历史
         $history = [];
         $result = (array)($res);
         if (isset($result['result'])) {
