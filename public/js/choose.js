@@ -3,7 +3,7 @@
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 // let serverUrl = '/activity';
-var serverUrl = 'http://wx.idsbllp.cn/activity';
+var serverUrl = 'https://wx.idsbllp.cn/activity';
 // 'http://hongyan.cqupt.edu.cn/activity';
 var closeHeight = '1.06666667rem',
     oneRank = 2,
