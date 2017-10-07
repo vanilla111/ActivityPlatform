@@ -41,7 +41,7 @@ class WeiXinAuthenticate
      * 跳转域名
      * @var string
      */
-    protected $domain = 'http://hongyan.cqupt.edu.cn';
+    protected $domain = 'https://wx.idsbllp.cn';
 
     /**
      * Handle an incoming request.
