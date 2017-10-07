@@ -98,7 +98,7 @@ class WeiXinAuthenticate
 
             $oauth2 = $this->baseOAUTH . '?' . $this->build_query([
                     'appid' => $config['appid'],
-                    'redirect_uri' => $this->domain . '/activity/wx',
+                    'redirect_uri' => $this->domain . '/activity/wx/index',
                     'response_type' => 'code',
                     'scope' => $this->scope,
                     'state' => $this->state
