@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>选择组织</title>
     <script type="text/javascript" src="../js/flexible.js"></script>
     <link rel="stylesheet" href="../styles/icon/iconfont.css">
     <link rel="stylesheet" href="../styles/choose.css">

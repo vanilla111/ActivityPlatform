@@ -13,9 +13,9 @@ var closeHeight = '1.06666667rem',
     beforeOpen = void 0,
     nowData = [],
     postInfo = true,
-    data = JSON.parse(sessionStorage.getItem('userInfo')).act_info;
+    data = JSON.parse(sessionStorage.getItem('userInfo'));
 
-console.log(data);
+if (data) data = data.act_info;
 
 //data = [[[{id: 1024,name:'web'},{id:111,name:'移动'},{id:2323,name:'视觉'}],[{id:123,name:'香梨'},{id:23,name:'红富士'}]]];
 

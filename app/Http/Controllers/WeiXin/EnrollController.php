@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\DB;
  */
 class EnrollController extends Controller
 {
-    private $getStuInfoByOpenidUrl = "http://hongyan.cqupt.edu.cn/MagicLoop/index.php?s=/addon/UserCenter/UserCenter/getStuInfoByOpenId&";
+    private $getStuInfoByOpenidUrl = "https://hongyan.cqupt.edu.cn/MagicLoop/index.php?s=/addon/UserCenter/UserCenter/getStuInfoByOpenId&";
 
     public function getUserInfo(Request $request)
     {
@@ -74,7 +74,7 @@ class EnrollController extends Controller
             'password' => Hash::make($stu_info['idnum']),
             'wx_openid' => $user_info['openid'],
             'wx_nickname' => $user_info['nickname'],
-            'wx_avatar' => $user_info['avatar'],
+            'wx_avatar' => $user_info['headimgurl'],
             'gender' => $stu_info['gender'],
             'college' => $stu_info['collage'],
             'grade' => $stu_info['grade']
