@@ -64,7 +64,7 @@ class EnrollController extends Controller
             return response()->json([
                 'status' => 0,
                 'message' => 'don\'t have student information',
-                'data' => null
+                'data' => ['stu_info' => $stu_info, 'act_info' => $act_info]
              ], 400);
 
         $attributes = ['stu_code' => $stu_info['usernumber']];
@@ -89,7 +89,7 @@ class EnrollController extends Controller
         return response()->json([
             'status' => 1,
             'message' => 'success',
-            'data' => $user
+            'data' => ['stu_info' => $user, 'act_info' => $act_info]
         ], 200);
     }
 
