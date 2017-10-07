@@ -21,7 +21,7 @@
         </div>
         <a href="./choose">
             <button class="button"></button>
-        </a>    
+        </a>
     </container>
     <script src="../js/main.js"></script>
     <script src="../js/department.js"></script>

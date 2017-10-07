@@ -8,22 +8,17 @@ var serverUrl = 'http://wx.idsbllp.cn/activity';
 var closeHeight = '1.06666667rem',
     oneRank = 2,
     twoRank = 102,
-    phone = window.location.search.split('=')[1],
+    phone = sessionStorage.getItem('contact'),
     department = [],
     beforeOpen = void 0,
     nowData = [],
     postInfo = true,
-    data = {};
+    data = JSON.parse(sessionStorage.getItem('userInfo')).act_info;
+
+console.log(data);
 
 //data = [[[{id: 1024,name:'web'},{id:111,name:'移动'},{id:2323,name:'视觉'}],[{id:123,name:'香梨'},{id:23,name:'红富士'}]]];
-ajax({
-    method: 'get',
-    url: serverUrl + '/wx/userInfo',
-    success: function success(res) {
-        data = res.data.act_info;
-        console.log(data);
-    }
-});
+
 $('.content-choose').addEventListener('touchend', function (e) {
     var target = e.target;
     if (target.classList.contains('select-sure') || target.classList.contains('select-icon')) {
@@ -96,10 +91,29 @@ function changeIcon(nowEle, beforeEle) {
     beforeEle.classList.add('icon-xiala');
 }
 $('.more').addEventListener('touchstart', function () {
-    if (oneRank > 8) return;
+    if (oneRank > 4) return;
     var div = document.createElement('div');
     div.setAttribute('class', 'choose');
-    div.innerHTML = '<div class="select select-one" rank="' + oneRank + '">\n                        <div class="select-sure"><em>\u7EFC\u5408</em><i class="select-icon iconfont icon-xiala"></i></div>\n                        <div class="select-more">\n                            <p class="select-part">\u7EA2\u5CA9\u7F51\u6821\u5DE5\u4F5C\u7AD9</p>\n                            <p class="select-part">\u6821\u5B66\u751F\u4F1A</p>\n                            <p class="select-part">\u79D1\u6280\u8054\u5408\u4F1A</p>\n                            <p class="select-part">\u6821\u56E2\u59D4\u5404\u90E8\u5BA4</p>\n                            <p class="select-part">\u9752\u5E74\u5FD7\u613F\u8005\u534F\u4F1A</p>\n                            <p class="select-part">\u793E\u56E2\u8054\u5408\u4F1A</p>\n                            <p class="select-part">\u5927\u5B66\u751F\u827A\u672F\u56E2</p>\n                        </div>\n                    </div>\n                    <div class="select select-two" rank="' + twoRank + '">\n                        <div class="select-sure"><em>\u7EFC\u5408</em><i class="select-icon iconfont icon-xiala"></i></div>\n                        <div class="select-more">\n                            <p class="select-part">\u7EFC\u5408</p>\n                        </div>\n                    </div> ';
+    div.innerHTML = `
+        <div class="select select-one" rank="1">
+            <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
+            <div class="select-more">
+                <p class="select-part">红岩网校工作站</p>
+                <p class="select-part">校学生会</p>
+                <p class="select-part">科技联合会</p>
+                <p class="select-part">校团委各部室</p>
+                <p class="select-part">青年志愿者协会</p>
+                <p class="select-part">社团联合会</p>
+                <p class="select-part">大学生艺术团</p>
+            </div>
+        </div>
+        <div class="select select-two" rank="101">
+            <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
+            <div class="select-more">
+                <p class="select-part">综合</p>
+            </div>
+        </div>
+    `;
     $('.content-choose').appendChild(div);
     oneRank++;
     twoRank++;
