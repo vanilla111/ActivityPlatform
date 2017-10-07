@@ -89,7 +89,8 @@ class WeiXinAuthenticate
                     $user['access_token'] = $data['access_token'];
                     $request->session()->set('weixin.user', $user);
 
-                    return redirect()->to($this->url($request));
+                    //return redirect()->to($this->url($request));
+                    return redirect()->to($this->domain . '/activity/wx/index');
                 }
             }
 
