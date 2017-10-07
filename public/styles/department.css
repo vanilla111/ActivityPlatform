@@ -86,12 +86,11 @@ container {
   font: 0.16rem;
 }
 .button {
-  display: block;
   position: absolute;
   margin: auto;
+  margin-top: 0.8rem;
   left: 0;
   right: 0;
-  bottom: 1.333333rem;
   width: 4.26666667rem;
   height: 1.62666667rem;
   background-image: url(../imgs/index_button.png);

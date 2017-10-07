@@ -22,6 +22,8 @@ class EnrollController extends Controller
 {
     private $getStuInfoByOpenidUrl = "https://hongyan.cqupt.edu.cn/MagicLoop/index.php?s=/addon/UserCenter/UserCenter/getStuInfoByOpenId&";
 
+    private $bindStuInfoUrl = "https://wx.idsbllp.cn/MagicLoop/index.php?s=/addon/Bind/Bind/bind/openid/{openid}/token/gh_68f0a1ffc303";
+
     public function getUserInfo(Request $request)
     {
         $user_info = $request->session()->get("weixin.user");
@@ -60,12 +62,8 @@ class EnrollController extends Controller
         //用openid请求学生的详细信息
         $stu_info = $this->send(($this->getStuInfoByOpenidUrl . "openId=" . $user_info['openid']))['data'];
         //return $this->getStuInfoByOpenidUrl . "openId=" . $user_info['openid'];
-        if (empty($stu_info))
-            return response()->json([
-                'status' => 0,
-                'message' => 'don\'t have student information',
-                'data' => ['stu_info' => $stu_info, 'act_info' => $act_info]
-             ], 400);
+        if (empty($stu_info) || $stu_info['status'] != 200)
+            return response()->redirectTo(str_replace_first("{openid}", $user_info['openid'], $this->bindStuInfoUrl));
 
         $attributes = ['stu_code' => $stu_info['usernumber']];
         $values = [
