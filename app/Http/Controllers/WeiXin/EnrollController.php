@@ -63,7 +63,9 @@ class EnrollController extends Controller
         $stu_info = $this->send(($this->getStuInfoByOpenidUrl . "openId=" . $user_info['openid']))['data'];
         //return $this->getStuInfoByOpenidUrl . "openId=" . $user_info['openid'];
         if (empty($stu_info) || $stu_info['status'] != 200)
-            return response()->redirectTo(str_replace_first("{openid}", $user_info['openid'], $this->bindStuInfoUrl));
+            return response()->redirectTo(
+                str_replace_first("{openid}", $user_info['openid'], $this->bindStuInfoUrl) .
+                '/redirect/https%3a%2f%2fwx.idsbllp.cn%2factivity%2fwx%2findex');
 
         $attributes = ['stu_code' => $stu_info['usernumber']];
         $values = [
