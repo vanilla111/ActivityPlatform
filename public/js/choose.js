@@ -121,7 +121,6 @@ $('.more').addEventListener('click', function () {
 $('.sure').addEventListener('click', function () {
     if (postInfo) {
         postInfo = false;
-        department = [];
         ajax({
             method: 'post',
             url: serverUrl + '/wx/enroll',
@@ -130,6 +129,7 @@ $('.sure').addEventListener('click', function () {
             success: function success(res) {
                 window.alert(res.message);
                 postInfo = true;
+                department = [];
             },
             error: function error(res) {
                 if (_typeof(res.message) === "object") {
@@ -141,6 +141,7 @@ $('.sure').addEventListener('click', function () {
                 }
 
                 postInfo = true;
+                department = [];
             }
         });
     } else {
