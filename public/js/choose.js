@@ -121,8 +121,9 @@ $('.more').addEventListener('click', function () {
 });
 $('.sure').addEventListener('click', function () {
     if (postInfo) {
-        Array.prototype.slice.call($('.select-two .select-sure em')).forEach(val => {
-            department.push(val.getAttribute('activity_id'));
+        Array.prototype.slice.call($('.select-two .select-sure em')).forEach(function(val) {
+            var activity_id = val.getAttribute("activity_id");
+            activity_id && department.push(activity_id);
         });
         postInfo = false;
         ajax({
