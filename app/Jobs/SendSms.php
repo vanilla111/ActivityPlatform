@@ -78,6 +78,7 @@ class SendSms extends Job implements ShouldQueue
         // TODO 完整记录发送历史
         $history = [];
         $result = (array)($res);
+        $apply_data = ApplyData::find($this->enrollID);
         if (isset($result['result'])) {
             $result_arr = json_decode(json_encode($result), true);
             if ($result_arr['result']['err_code'] == 0 && $result_arr['result']['success']) {
@@ -88,10 +89,15 @@ class SendSms extends Job implements ShouldQueue
                     'request_id' => $result['request_id'],
                     'msg' => $result_arr['result']['msg'],
                     'model' => $result_arr['result']['model'],
+                    'act_key' => $apply_data->activity_key,
+                    'flow_id' => $apply_data->current_step,
+                    'name' => $apply_data->full_name,
+                    'stu_code' => $apply_data->stu_code,
+                    'contact' => $apply_data->contact,
+                    'content' => $this->content
                 ];
                 $sms_num->decrement('sms_num', $num);
                 //将申请信息标记为已发送
-                $apply_data = ApplyData::find($this->enrollID);
                 $apply_data->was_send_sms = 1;
                 $apply_data->save();
             }
@@ -103,7 +109,13 @@ class SendSms extends Job implements ShouldQueue
                 'msg' => $result['msg'],
                 'sub_code' => $result['sub_code'],
                 'sub_msg' => $result['sub_msg'],
-                'request_id' => $result['request_id']
+                'request_id' => $result['request_id'],
+                'act_key' => $apply_data->activity_key,
+                'flow_id' => $apply_data->current_step,
+                'name' => $apply_data->full_name,
+                'stu_code' => $apply_data->stu_code,
+                'contact' => $apply_data->contact,
+                'content' => $this->content
             ];
 
         }

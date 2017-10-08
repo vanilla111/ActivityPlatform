@@ -20,7 +20,7 @@ class SmsHistoryController extends Controller
             $condition['code'] = 15;
 
         $condition['who_send'] = $user['user']['admin_id'];
-        $need = ['request_id', 'content', 'msg', 'sub_code', 'sub_msg'];
+        $need = ['request_id', 'content', 'msg', 'sub_code', 'sub_msg', 'act_key', 'flow_id', 'name', 'stu_code', 'contact'];
         return response()->json([
             'status' => 1,
             'message' => 'success',

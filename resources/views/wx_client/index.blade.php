@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>2017拉帮结派</title>
+    <title>2017学生组织报名系统</title>
      <script type="text/javascript" src="../js/flexible.js"></script>
     <link rel="stylesheet" href="../styles/index.css">
 </head>

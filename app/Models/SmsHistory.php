@@ -8,7 +8,8 @@ class SmsHistory extends Model
 {
     protected $table = 'sms_history';
 
-    protected $fillable = ['content', 'who_send', 'msg', 'code', 'sub_code', 'sub_msg', 'model', 'request_id', 'other_info'];
+    protected $fillable = ['who_send', 'msg', 'code', 'sub_code', 'sub_msg', 'model', 'request_id', 'act_key', 'flow_id',
+        'name', 'stu_code', 'contact', 'content', 'other_info'];
 
     public function getHistoryList($condition, $need, $page)
     {

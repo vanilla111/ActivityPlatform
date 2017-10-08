@@ -121,6 +121,7 @@ $('.more').addEventListener('click', function () {
 $('.sure').addEventListener('click', function () {
     if (postInfo) {
         postInfo = false;
+        department = [];
         ajax({
             method: 'post',
             url: serverUrl + '/wx/enroll',
