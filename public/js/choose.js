@@ -63,9 +63,10 @@ $('.content-choose').addEventListener('click', function (e) {
         beforeOpen = undefined;
     } else if (target.classList.contains('select-part') && target.parentElement.parentElement.classList.contains('select-two')) {
         beforeOpen.querySelector('em').innerText = target.innerText;
-        if (target.getAttribute('activity_id') !== null) {
-            department.push(parseInt(target.getAttribute('activity_id')));
-        }
+        beforeOpen.querySelector('em').setAttribute('activity_id', target.getAttribute('activity_id'));
+        // if (target.getAttribute('activity_id') !== null) {
+        //     department.push(parseInt(target.getAttribute('activity_id')));
+        // }
         //console.log(department)
         beforeOpen.classList.remove('add-height');
         beforeOpen.style.height = closeHeight;
@@ -120,6 +121,9 @@ $('.more').addEventListener('click', function () {
 });
 $('.sure').addEventListener('click', function () {
     if (postInfo) {
+        Array.prototype.slice.call($('.select-two .select-sure em')).forEach(val => {
+            department.push(val.getAttribute('activity_id'));
+        });
         postInfo = false;
         ajax({
             method: 'post',
@@ -129,7 +133,7 @@ $('.sure').addEventListener('click', function () {
             success: function success(res) {
                 window.alert(res.message);
                 postInfo = true;
-                department = [];
+                department.length = 0;
             },
             error: function error(res) {
                 if (_typeof(res.message) === "object") {
@@ -141,7 +145,7 @@ $('.sure').addEventListener('click', function () {
                 }
 
                 postInfo = true;
-                department = [];
+                department.length = 0;
             }
         });
     } else {
