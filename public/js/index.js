@@ -3,9 +3,13 @@
 var serverUrl = './department';
 var successInfo = new RegExp('^[1][3-8]\\d{9}$');
 
-var query = location.search
-if (/ref=.*joinus/.test(query)) {
-    sessionStorage.setItem('joinus', true)
+var query = location.search;
+var now = new Date();
+var startTime = new Date('2017/10/11 03:00:00');
+
+if (/ref=.*joinus/.test(query) || now < startTime) {
+    sessionStorage.setItem('joinus', true);
+    document.title = '红岩网校工作站招新啦';
     serverUrl = './choose';
 }
 
