@@ -1,9 +1,10 @@
 'use strict';
 
 var serverUrl = './department';
+var successInfo = new RegExp('^[1][3-8]\\d{9}$');
 //var serverUrl = './choose';
 $('.button').addEventListener('touchstart', function () {
-    if ($('.input-content').value.length !== 11) {
+    if (!successInfo.test($('.input-content').value)) {
         window.alert('请输入正确的手机号');
     } else {
         sessionStorage.setItem('contact', $('.input-content').value);
