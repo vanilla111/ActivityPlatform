@@ -9,7 +9,9 @@
 </head>
 <body>
     <container class="container">
-        <div class="title"><img class="img-title" src="../imgs/title.png" alt=""></div>
+        <div class="title">
+            <img class="img-title" src="../imgs/title.png" alt="">
+        </div>
         <div class="content">
             <div class="content-choose">
                 <div class="choose">
@@ -54,6 +56,7 @@
                 </div>
             </div>
             <div class="more">
+                <p class="prompt">(最多只能报名5个部门哦)</p>
                 <i class="iconfont icon-tianjia icon"></i>
                 <span class="add">继续添加报名组织</span>
             </div>

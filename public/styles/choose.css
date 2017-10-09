@@ -39,6 +39,12 @@ p {
   width: 5.06666667rem;
   height: 0.8rem;
 }
+.prompt {
+  text-align: center;
+  color: #b2b9b8;
+  font-size: 0.32rem;
+  margin-bottom: .2rem;
+}
 .content {
   width: 9.34666667rem;
   margin: 0 auto;
@@ -107,7 +113,7 @@ p {
   z-index: 2;
 }
 .content .more {
-  width: 3.74666667rem;
+  text-align: center;
   height: 0.54666667rem;
   margin: 0.62666667rem auto 0;
   line-height: 0.54666667rem;

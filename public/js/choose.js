@@ -17,6 +17,39 @@ var closeHeight = '1.06666667rem',
 
 if (data) data = data.act_info;
 
+if (sessionStorage.getItem('joinus')) {
+    $('.content-choose').innerHTML = `
+        <div class="choose">
+            <div class="select select-one" rank="0">
+                <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
+                <div class="select-more">
+                    <p class="select-part">红岩网校工作站</p>
+                </div>
+            </div>
+            <div class="select select-two" rank="100">
+                <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
+                <div class="select-more">
+                    <p class="select-part">综合</p>
+                </div>
+            </div>                                
+        </div>
+        <div class="choose">
+            <div class="select select-one" rank="1">
+                <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
+                <div class="select-more">
+                    <p class="select-part">红岩网校工作站</p>
+                </div>
+            </div>
+            <div class="select select-two" rank="101">
+                <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
+                <div class="select-more">
+                    <p class="select-part">综合</p>
+                </div>
+            </div>
+        </div>
+    `
+}
+
 //data = [[[{id: 1024,name:'web'},{id:111,name:'移动'},{id:2323,name:'视觉'}],[{id:123,name:'香梨'},{id:23,name:'红富士'}]]];
 
 $('.content-choose').addEventListener('click', function (e) {
@@ -95,26 +128,43 @@ $('.more').addEventListener('click', function () {
     if (oneRank > 4) return;
     var div = document.createElement('div');
     div.setAttribute('class', 'choose');
-    div.innerHTML = `
-        <div class="select select-one" rank="1">
-            <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
-            <div class="select-more">
-                <p class="select-part">红岩网校工作站</p>
-                <p class="select-part">校学生会</p>
-                <p class="select-part">科技联合会</p>
-                <p class="select-part">校团委各部室</p>
-                <p class="select-part">青年志愿者协会</p>
-                <p class="select-part">社团联合会</p>
-                <p class="select-part">大学生艺术团</p>
+    if (sessionStorage.getItem('joinus')) {
+        div.innerHTML = `
+            <div class="select select-one" rank="1">
+                <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
+                <div class="select-more">
+                    <p class="select-part">红岩网校工作站</p>
+                </div>
             </div>
-        </div>
-        <div class="select select-two" rank="101">
-            <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
-            <div class="select-more">
-                <p class="select-part">综合</p>
+            <div class="select select-two" rank="101">
+                <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
+                <div class="select-more">
+                    <p class="select-part">综合</p>
+                </div>
             </div>
-        </div>
-    `;
+        `;
+    } else {
+        div.innerHTML = `
+            <div class="select select-one" rank="1">
+                <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
+                <div class="select-more">
+                    <p class="select-part">红岩网校工作站</p>
+                    <p class="select-part">校学生会</p>
+                    <p class="select-part">科技联合会</p>
+                    <p class="select-part">校团委各部室</p>
+                    <p class="select-part">青年志愿者协会</p>
+                    <p class="select-part">社团联合会</p>
+                    <p class="select-part">大学生艺术团</p>
+                </div>
+            </div>
+            <div class="select select-two" rank="101">
+                <div class="select-sure"><em>综合</em><i class="select-icon iconfont icon-xiala"></i></div>
+                <div class="select-more">
+                    <p class="select-part">综合</p>
+                </div>
+            </div>
+        `;
+    }
     $('.content-choose').appendChild(div);
     oneRank++;
     twoRank++;
