@@ -113,8 +113,10 @@ class EnrollController extends Controller
         $user_id = $user_info['user_id'];
 
         //如果联系方式不一致，更新用户的联系方式
-        if ($enroll_info['contact'] != $user_info['contact'])
-            $user_info->update(['contact' => $enroll_info['contact']]);
+        if ($enroll_info['contact'] != $user_info->contact) {
+            $user_info->contact = $enroll_info['contact'];
+            $user_info->save();
+        }
 
         //多活动同时报名,先检查个活动是否开启了报名、时间对否、人数是否超过限制
         $act_key = explode(',' , $enroll_info['act_key']);
