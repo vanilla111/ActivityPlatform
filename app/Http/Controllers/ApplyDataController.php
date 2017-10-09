@@ -18,10 +18,10 @@ class ApplyDataController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('data.actkey')->only(['index']);
+//        $this->middleware('data.actkey')->only(['index']);
         $this->middleware('data.enrollid')->only(['show', 'update', 'destroy']);
         $this->middleware('data.flowid')->only(['store', 'operation', 'isSendSmsAndUpgrade', 'uploadExcelFile', 'oneKeyUpdate']);
-        $this->middleware('data.base')->only(['index', 'store', 'show', 'update', 'destroy', 'uploadExcelFile', 'oneKeyUpdate']);
+        $this->middleware('data.base')->only(['index', 'store', 'show', 'destroy', 'uploadExcelFile', 'oneKeyUpdate']);
         $this->middleware('data.index')->only(['index']);
         $this->middleware('data.store')->only(['store']);
         $this->middleware('data.checkauth')->only(['store']);
@@ -45,7 +45,7 @@ class ApplyDataController extends Controller
         $info['per_page'] = $info['per_page'] ? : 20;
         $info['sortby']   = $info['sortby'] ? : 'updated_at';
         $info['sort']     = $info['sort'] ? : 'desc';
-        $info['current_step'] = $info['flow_id'] ? explode(',', $info['flow_id']) : $request->get('current_flow');
+        $info['current_step'] = $info['flow_id'] ? explode(',', $info['flow_id']) : $request->get('enroll_flow');
         $info['was_send_sms'] = $info['was_send_sms'] ? 1 : 0;
         unset($info['flow_id']);
 
@@ -444,7 +444,7 @@ class ApplyDataController extends Controller
         //有关参数初始化
         $info['sortby']   = $info['sortby'] ? : 'updated_at';
         $info['sort']     = $info['sort'] ? : 'desc';
-        $info['current_step'] = $info['flow_id'] ? explode(',', $info['flow_id']) : $request->get('current_flow');
+        $info['current_step'] = $info['flow_id'] ? explode(',', $info['flow_id']) : $request->get('enroll_flow');
         $info['was_send_sms'] = $info['was_send_sms'] ? 1 : 0;
         unset($info['flow_id']);
 
@@ -483,8 +483,9 @@ class ApplyDataController extends Controller
     public function uploadExcelFile(Request $request)
     {
         $act_key = $request->get('act_key');
+        $flow_id = $request->get('flow_id');
 
-        Excel::load($request->file('excel'), function($reader) use($act_key){
+        Excel::load($request->file('excel'), function($reader) use($act_key, $flow_id){
             //文件默认按照姓名学号联系方式的格式存储
             $data = $reader->noHeading()->all();
             $insert_data = [];
@@ -492,6 +493,7 @@ class ApplyDataController extends Controller
                 array_push($insert_data, array(
                     'user_id' => -1,
                     'activity_key' => $act_key,
+                    'current_step' => $flow_id,
                     'full_name' => $data[$i][0],
                     'stu_code' => intval($data[$i][1]),
                     'contact' => intval($data[$i][2])

@@ -156,7 +156,7 @@ class FlowController extends Controller
         // 删除规则:
         // 1.该流程不能有申请信息
         $apply_data_m = new ApplyData();
-        if (!$res = $apply_data_m->hasApplyData(['current_step' => $flow_id]))
+        if ($res = $apply_data_m->hasApplyData(['current_step' => $flow_id]))
             return response()->json([
                 'status' => 0,
                 'message' => '该流程尚有人员信息，删除失败'

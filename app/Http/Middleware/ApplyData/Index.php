@@ -46,7 +46,7 @@ class Index
         if (!empty($condition['flow_id'])) {
             $flow_id = explode(',', $condition['flow_id']);
             foreach ($flow_id as $value)
-                if (!is_numeric($value)) {
+                if (!is_numeric($value) || $value <= 0) {
                     array_push($error_mes, 'flow_id参数有误,应为正整数序列');
                     break;
                 }
