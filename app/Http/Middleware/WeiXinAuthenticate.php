@@ -106,6 +106,7 @@ class WeiXinAuthenticate
                 ]);
 
             $request->session()->set('weixin.state', $this->state);
+            $request->session()->save();
 
             return new RedirectResponse($oauth2 . '#wechat_redirect');
 

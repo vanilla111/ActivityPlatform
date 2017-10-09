@@ -62,7 +62,7 @@ class EnrollController extends Controller
         //用openid请求学生的详细信息
         $stu_info = $this->send(($this->getStuInfoByOpenidUrl . "openId=" . $user_info['openid']))['data'];
         //return $this->getStuInfoByOpenidUrl . "openId=" . $user_info['openid'];
-        if (empty($stu_info) || $stu_info['status'] != 200)
+        if (empty($stu_info) || (isset($stu_info['status']) && $stu_info['status'] != 200))
             return response()->redirectTo(
                 str_replace_first("{openid}", $user_info['openid'], $this->bindStuInfoUrl) .
                 '/redirect/https%3a%2f%2fwx.idsbllp.cn%2factivity%2fwx%2findex');
@@ -113,8 +113,10 @@ class EnrollController extends Controller
         $user_id = $user_info['user_id'];
 
         //如果联系方式不一致，更新用户的联系方式
-        if ($enroll_info['contact'] != $user_info['contact'])
-            $user_info->update(['contact' => $enroll_info['contact']]);
+        if ($enroll_info['contact'] != $user_info->contact) {
+            $user_info->contact = $enroll_info['contact'];
+            $user_info->save();
+        }
 
         //多活动同时报名,先检查个活动是否开启了报名、时间对否、人数是否超过限制
         $act_key = explode(',' , $enroll_info['act_key']);
