@@ -12,10 +12,7 @@ var closeHeight = '1.06666667rem',
     department = [],
     beforeOpen = void 0,
     nowData = [],
-    postInfo = true,
-    data = JSON.parse(sessionStorage.getItem('userInfo'));
-
-if (data) data = data.act_info;
+    postInfo = true;
 
 var query = location.search;
 var now = new Date();
@@ -24,7 +21,24 @@ var startTime = new Date('2017/10/11 03:00:00');
 if (/ref=.*joinus/.test(query) || now < startTime) {
     sessionStorage.setItem('joinus', true);
     document.title = '红岩网校工作站招新啦';
+
+    ajax({
+        method: 'get',
+        url: 'https://wx.idsbllp.cn/activity/wx/userInfo',
+        success: function success(res) {
+            var data = res.data;
+            var contact = data.stu_info.contact
+            if (contact) {
+                $('.input-content').value = contact;
+            }
+            sessionStorage.setItem('userInfo', JSON.stringify(data));
+        }
+    });
 }
+
+var data = JSON.parse(sessionStorage.getItem('userInfo'));
+
+if (data) data = data.act_info;
 
 if (sessionStorage.getItem('joinus')) {
     $('.content-choose').innerHTML = `
