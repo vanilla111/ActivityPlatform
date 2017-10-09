@@ -10,6 +10,7 @@ var startTime = new Date('2017/10/11 03:00:00');
 if (/ref=.*joinus/.test(query) || now < startTime) {
     sessionStorage.setItem('joinus', true);
     document.title = '红岩网校工作站招新啦';
+    // serverUrl = 'https://wx.idsbllp.cn/aboutus/mobile/';
     serverUrl = './choose';
 }
 
