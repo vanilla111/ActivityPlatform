@@ -9,14 +9,15 @@ var query = location.search;
 var now = new Date();
 var startTime = new Date('2017/10/11 03:00:00');
 
-if (/ref=.*joinus/.test(query) || now < startTime) {
-    document.title = '红岩网校工作站招新啦';
-    location.href = 'https://wx.idsbllp.cn/activity/wx/index';
-}
-
 var department = ['redrock', 'kelian', 'qingxie', 'shelian', 'tuanwei', 'xueshenghui', 'yishutuan'];
 var H5url = ['https://wx.idsbllp.cn/joinus2017/?ref='+location.href, 'http://www.cqupt-sstu.cn/', 'http://u5084437.viewer.maka.im/pcviewer/FW8FHQK0', 'http://u5073382.viewer.maka.im/pcviewer/UCLQV5O9', 'http://u4956478.viewer.maka.im/k/TZIIQ653', 'https://s.wcd.im/v/2bpk8Z36/', 'http://u5193531.viewer.maka.im/pcviewer/G5J532W2'];
 
+if (/ref=.*joinus/.test(query) || now < startTime) {
+    document.title = '红岩网校工作站招新啦';
+    sessionStorage.setItem('joinus', true);
+    department = ['redrock'];
+    H5url = ['https://wx.idsbllp.cn/joinus2017/?ref='+location.href];
+}
 var departmentNumber = department.length;
 var departmentIndex = Math.floor(Math.random() * departmentNumber);
 var carousel = $('.carousel');
