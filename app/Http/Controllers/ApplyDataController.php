@@ -50,7 +50,7 @@ class ApplyDataController extends Controller
         unset($info['flow_id']);
 
         $need = ['enroll_id', 'user_id', 'stu_code', 'full_name',
-            'contact', 'college', 'gender', 'score', 'evaluation'];
+            'contact', 'college', 'gender', 'score', 'evaluation', 'was_send_sms'];
 
         //查询
         $new_info = unset_empty($info);
@@ -131,7 +131,7 @@ class ApplyDataController extends Controller
             'act_name'     => $request->get('act_name'),
             //如果直接添加的话
             'full_name'    => $info['full_name'],
-            'grade'        => $info['grade'],
+            'grade'        => substr($info['stu_code'], 0, 4),
             'gender'       => $info['gender']
         ];
         if (!empty($userInfo)) {
