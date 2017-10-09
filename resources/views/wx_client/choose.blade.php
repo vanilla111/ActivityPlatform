@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="more">
-                <p class="prompt">(最多只能报名5个部门哦)~</p>
+                <p class="prompt">(最多只能报名5个部门哦)</p>
                 <i class="iconfont icon-tianjia icon"></i>
                 <span class="add">继续添加报名组织</span>
             </div>
