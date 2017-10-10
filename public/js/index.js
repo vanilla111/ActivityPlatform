@@ -29,6 +29,10 @@ ajax({
     // url: './userInfo',
     success: function success(res) {
         var data = res.data;
+        if (data.status == 0) {
+            location.href = data.redirectUrl;
+            return;
+        }
         var contact = data.stu_info.contact
         if (contact) {
             $('.input-content').value = contact;
