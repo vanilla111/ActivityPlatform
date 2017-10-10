@@ -26,6 +26,7 @@ $('.button').addEventListener('touchstart', function () {
 ajax({
     method: 'get',
     url: 'https://wx.idsbllp.cn/activity/wx/userInfo',
+    // url: './userInfo',
     success: function success(res) {
         var data = res.data;
         var contact = data.stu_info.contact

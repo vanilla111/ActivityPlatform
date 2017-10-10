@@ -6,6 +6,7 @@ use App\Models\DeptInfo;
 use App\Models\UserData;
 use App\Models\ActDesign;
 use App\Models\ApplyData;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -60,10 +61,10 @@ class EnrollController extends Controller
             ], 200);
 
         //用openid请求学生的详细信息
-        $stu_info = $this->send(($this->getStuInfoByOpenidUrl . "openId=" . $user_info['openid']))['data'];
-        //return $this->getStuInfoByOpenidUrl . "openId=" . $user_info['openid'];
-        if (empty($stu_info) || (isset($stu_info['status']) && $stu_info['status'] != 200))
-            return response()->redirectTo(
+        $res = $this->send(($this->getStuInfoByOpenidUrl . "openId=" . $user_info['openid']));
+        $stu_info = $res['data'];
+        if (empty($res) || (isset($res['status']) && $res['status'] != 200))
+            return new RedirectResponse(
                 str_replace_first("{openid}", $user_info['openid'], $this->bindStuInfoUrl) .
                 '&redirect=../activity/wx/index');
 
