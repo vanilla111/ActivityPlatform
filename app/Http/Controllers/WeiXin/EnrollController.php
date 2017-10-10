@@ -63,10 +63,14 @@ class EnrollController extends Controller
         //用openid请求学生的详细信息
         $res = $this->send(($this->getStuInfoByOpenidUrl . "openId=" . $user_info['openid']));
         $stu_info = $res['data'];
+        $res['status'] = 400;
         if (empty($res) || (isset($res['status']) && $res['status'] != 200))
-            return new RedirectResponse(
-                str_replace_first("{openid}", $user_info['openid'], $this->bindStuInfoUrl) .
-                '&redirect=../activity/wx/index');
+            return response()->json([
+                'status' => 0,
+                'message' => '暂未绑定',
+                'redirectUrl' =>  str_replace_first("{openid}", $user_info['openid'], $this->bindStuInfoUrl) .
+                    '&redirect=../activity/wx/index'
+            ], 200);
 
         $attributes = ['stu_code' => $stu_info['usernumber']];
         $values = [
