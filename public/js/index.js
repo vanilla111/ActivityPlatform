@@ -28,11 +28,11 @@ ajax({
     url: 'https://wx.idsbllp.cn/activity/wx/userInfo',
     // url: './userInfo',
     success: function success(res) {
-        var data = res.data;
-        if (data.status == 0) {
+        if (res.status == 0) {
             location.href = data.redirectUrl;
             return;
         }
+        var data = res.data;
         var contact = data.stu_info.contact
         if (contact) {
             $('.input-content').value = contact;
