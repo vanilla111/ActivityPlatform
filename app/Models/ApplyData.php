@@ -27,7 +27,7 @@ class ApplyData extends Model
 
     public function hasApplyData($condition = [])
     {
-        return $this->where('status', '>=', '0')->where($condition)->select('*')->first();
+        return $this->where('status', '>=', '0')->where($condition)->first();
     }
 
     public function getApplyDataList($info, $need)

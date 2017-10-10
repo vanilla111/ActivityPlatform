@@ -162,16 +162,19 @@ class FlowController extends Controller
                 'message' => '该流程尚有人员信息，删除失败'
             ], 400);
 
-        return $res;
-        if ($res['type'] <= 0 )
+
+        $flow = FlowInfo::find($flow_id);
+        if ($flow->type <= 0 )
             return response()->json([
                 'status' => 0,
                 'message' => '该流程为报名流程，无法删除'
             ], 400);
 
-        $update = ['status' => -1];
-        $flow_m = new FlowInfo();
-        $flow_m->updateFlowInfo(['flow_id' => $flow_id], $update);
+//        $update = ['status' => -1];
+//        $flow_m = new FlowInfo();
+//        $flow_m->updateFlowInfo(['flow_id' => $flow_id], $update);
+        $flow->status = -1;
+        $flow->save();
 
         return response()->json(['status' => 1, 'message' => 'success'], 204);
 
