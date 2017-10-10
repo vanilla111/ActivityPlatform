@@ -48,7 +48,6 @@ var department = [
     {
         name: '学生会',
         logo: 'xueshenghui',
-        'https://s.wcd.im/v/2bpk8Z36/'
         H5url: 'https://s.wcd.im/v/2bpk8Z36/'
     },
     {
