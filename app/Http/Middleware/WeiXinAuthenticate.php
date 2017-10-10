@@ -53,12 +53,12 @@ class WeiXinAuthenticate
      */
     public function handle($request, Closure $next)
     {
-        $user = [
-            'openid'   => 'ouRCyjng0vYbA0di_cvqh74W__1g',
-            'nickname' => 'test',
-            'headimgurl' => 'test'
-        ];
-        $request->session()->put('weixin.user', $user);
+//        $user = [
+//            'openid'   => 'ouRCyjng0vYbA0di_cvqh74W__1g',
+//            'nickname' => 'test',
+//            'headimgurl' => 'test'
+//        ];
+//        $request->session()->put('weixin.user', $user);
 
         $config = $this->load();
 
