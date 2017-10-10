@@ -57,7 +57,7 @@ var department = [
     },
     {
         name: '团委组织部',
-        logo: 'tuanwei',
+        logo: 'tuanzu',
         H5url: 'http://u5276013.viewer.maka.im/pcviewer/EHC3F64W'
     },
 ];
