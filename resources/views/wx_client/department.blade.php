@@ -8,22 +8,41 @@
 </head>
 <body>
     <container class="container">
-        <div class="carousel">
-            <div class="carousel-banner">
-                <div class="arrow arrow-left"></div>
-                <img src="../imgs/banner_redrock.png" class="carousel-bannerimg bounce-in" />
-                <div class="arrow arrow-right"></div>
-            </div>
-            <div class="carousel-frame rotate-left">
-                <img src="../imgs/pic_redrock.png" class="carousel-frameimg" />
-            </div>
-            <p class="msg">点击图片查看招新H5</p>
+        <div class="departments">
+            <!-- <a href="##" class="asdasda">
+                <img src="../imgs/pic_redrock.png" class="asdasda-img">
+                <span class="asdasda-name">红枫湖那份难受</span>
+            </a>
+            <a href="##" class="asdasda">
+                <img src="../imgs/pic_redrock.png" class="asdasda-img">
+                <span class="asdasda-name">红枫湖那份难受</span>
+            </a>
+            <a href="##" class="asdasda">
+                <img src="../imgs/pic_redrock.png" class="asdasda-img">
+                <span class="asdasda-name">红枫湖那份难受</span>
+            </a>
+            <a href="##" class="asdasda">
+                <img src="../imgs/pic_shelian.png" class="asdasda-img">
+                <span class="asdasda-name">红枫湖那份难受</span>
+            </a>
+            <a href="##" class="asdasda">
+                <img src="../imgs/pic_shelian.png" class="asdasda-img">
+                <span class="asdasda-name">红枫湖那份难受</span>
+            </a>
+            <a href="##" class="asdasda">
+                <img src="../imgs/pic_redrock.png" class="asdasda-img">
+                <span class="asdasda-name">红枫湖那份难受</span>
+            </a>
+            <a href="##" class="asdasda">
+                <img src="../imgs/pic_redrock.png" class="asdasda-img">
+                <span class="asdasda-name">红枫湖那份难受</span>
+            </a> -->
         </div>
         <a href="./choose">
             <button class="button"></button>
         </a>
     </container>
-    <script src="../js/main.js"></script>
+    <!-- <script src="../js/main.js"></script> -->
     <script src="../js/department.js"></script>
 </body>
 </html>
