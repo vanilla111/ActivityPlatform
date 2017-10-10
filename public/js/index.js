@@ -29,7 +29,7 @@ ajax({
     // url: './userInfo',
     success: function success(res) {
         if (res.status == 0) {
-            location.href = data.redirectUrl;
+            location.href = res.redirectUrl;
             return;
         }
         var data = res.data;
