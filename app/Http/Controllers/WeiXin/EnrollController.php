@@ -63,7 +63,6 @@ class EnrollController extends Controller
         //用openid请求学生的详细信息
         $res = $this->send(($this->getStuInfoByOpenidUrl . "openId=" . $user_info['openid']));
         $stu_info = $res['data'];
-        $res['status'] = 400;
         if (empty($res) || (isset($res['status']) && $res['status'] != 200))
             return response()->json([
                 'status' => 0,
@@ -118,7 +117,7 @@ class EnrollController extends Controller
         $user_id = $user_info['user_id'];
 
         //如果联系方式不一致，更新用户的联系方式
-        if ($enroll_info['contact'] != $user_info->contact) {
+        if (empty($user_info->contact) || $enroll_info['contact'] != $user_info->contact) {
             $user_info->contact = $enroll_info['contact'];
             $user_info->save();
         }
