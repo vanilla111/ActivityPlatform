@@ -162,7 +162,7 @@ class FlowController extends Controller
                 'message' => '该流程尚有人员信息，删除失败'
             ], 400);
 
-        if ($res['type'] <=0 )
+        if ($res->type <= 0 )
             return response()->json([
                 'status' => 0,
                 'message' => '该流程为报名流程，无法删除'
