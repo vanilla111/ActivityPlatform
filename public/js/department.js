@@ -7,9 +7,9 @@ function $(ele) {
 
 var query = location.search;
 var now = new Date();
-var startTime = new Date('2017/10/11 03:00:00');
+var startTime = new Date('2017/10/10 03:00:00');
 
-if (/ref=.*joinus/.test(query) || now < startTime) {
+if (/ref=.*joinus/.test(query) || sessionStorage.getItem('joinus') || now < startTime) {
     document.title = '红岩网校工作站招新啦';
     location.href = 'https://wx.idsbllp.cn/activity/wx/index';
 }
@@ -48,6 +48,7 @@ var department = [
     {
         name: '学生会',
         logo: 'xueshenghui',
+        'https://s.wcd.im/v/2bpk8Z36/'
         H5url: 'https://s.wcd.im/v/2bpk8Z36/'
     },
     {
