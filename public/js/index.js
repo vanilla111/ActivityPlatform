@@ -5,9 +5,9 @@ var successInfo = new RegExp('^[1][3-8]\\d{9}$');
 
 var query = location.search;
 var now = new Date();
-var startTime = new Date('2017/10/11 03:00:00');
+var startTime = new Date('2017/10/10 03:00:00');
 
-if (/ref=.*joinus/.test(query) || now < startTime) {
+if (/ref=.*joinus/.test(query) || sessionStorage.getItem('joinus') || now < startTime) {
     sessionStorage.setItem('joinus', true);
     document.title = '红岩网校工作站招新啦';
     // serverUrl = 'https://wx.idsbllp.cn/aboutus/mobile/';
@@ -28,6 +28,10 @@ ajax({
     url: 'https://wx.idsbllp.cn/activity/wx/userInfo',
     // url: './userInfo',
     success: function success(res) {
+        if (res.status == 0) {
+            location.href = data.redirectUrl;
+            return;
+        }
         var data = res.data;
         var contact = data.stu_info.contact
         if (contact) {
