@@ -15,7 +15,8 @@ class Base
      */
     public function handle($request, Closure $next)
     {
-        if (!$request->session()->has('user'))
+        $user_id = $request->session()->has('user') ? $request->session()->get('user') : $request->get('user_id');
+        if (empty($user_id))
             return response()->json([
                 'status' => 0,
                 'message' => '请先登录',
@@ -23,7 +24,6 @@ class Base
                 'method' => 'post'
             ], 403);
 
-        $user_id = $request->session()->get('user');
         $request->attributes->add(compact('user_id'));
 
         return $next($request);

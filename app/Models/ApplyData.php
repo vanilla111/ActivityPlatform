@@ -138,6 +138,8 @@ class ApplyData extends Model
             else
                 $condition['eq']['current_step'] = $info['current_step'];
         }
+        if (isset($info['user_id']))
+            $condition['eq']['user_id'] = $info['user_id'];
         if (isset($info['gender']))
             $condition['eq']['gender'] = $info['gender'];
         if (isset($info['act_key']))
@@ -176,7 +178,8 @@ class ApplyData extends Model
         //状态限制
         $res = $this->where('status', '>=', '0');
         //等价条件查询
-        $res = $res->where($condition['eq']);
+        if (isset($condition['eq']))
+            $res = $res->where($condition['eq']);
         //数组查询
         if (isset($condition['in']))
             $res = $res->whereIn('current_step', $condition['in']);

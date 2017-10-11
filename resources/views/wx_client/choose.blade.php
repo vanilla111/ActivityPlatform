@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>重邮校级学生组织招新啦</title>
+    <script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../layer/layer.js"></script>
     <script type="text/javascript" src="../js/flexible.js"></script>
     <link rel="stylesheet" href="../styles/icon/iconfont.css">
     <link rel="stylesheet" href="../styles/choose.css">

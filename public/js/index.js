@@ -29,11 +29,16 @@ ajax({
     // url: './userInfo',
     success: function success(res) {
         if (res.status == 0) {
-            location.href = res.redirectUrl;
+            layer.confirm('请先绑定微信公众号 ^_^!', {
+                btn :['确定'],
+                btn1: function (index, layero) {
+                    location.href = res.redirectUrl;
+                }
+            });
             return;
         }
         var data = res.data;
-        var contact = data.stu_info.contact
+        var contact = data.stu_info.contact;
         if (contact) {
             $('.input-content').value = contact;
         }

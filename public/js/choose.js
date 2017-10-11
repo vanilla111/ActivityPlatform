@@ -2,7 +2,7 @@
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-// let serverUrl = '/activity';
+ // var serverUrl = '../';
 var serverUrl = 'https://wx.idsbllp.cn/activity';
 // 'http://hongyan.cqupt.edu.cn/activity';
 var closeHeight = '1.06666667rem',
@@ -207,7 +207,39 @@ $('.sure').addEventListener('click', function () {
             type: 'form',
             data: 'act_key=' + department + '&contact=' + phone,
             success: function success(res) {
-                window.alert(res.message);
+                //window.alert(res.message);
+                layer.open({
+                    content : '恭喜你报名成功！',
+                    btn : ['报名历史', '确定'],
+                    yes : function (index, layero) {
+                        var message = '';
+                        var userId = JSON.parse(sessionStorage.getItem('userInfo')).stu_info.user_id;
+                        ajax({
+                            method: 'get',
+                            url: serverUrl + '/api/user/applydata?' + 'user_id=' + userId,
+                            success:function success(res) {
+                                jQuery.each(res.data.data, function (key, value) {
+                                   message += value.act_name + '&nbsp' + value.created_at + "<br>";
+                                });
+                                layer.open({
+                                    title: '报名历史(最近十条)',
+                                    content: message
+                                });
+                            },
+                            error: function error(res) {
+                                message = '获取失败';
+                                layer.open({
+                                    title: '报名历史(最近十条)',
+                                    content: message
+                                });
+                            }
+                        });
+                    },
+                    btn2 : function (index ,layero) {
+                        //
+                    }
+
+                });
                 postInfo = true;
                 department.length = 0;
             },

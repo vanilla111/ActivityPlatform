@@ -195,7 +195,7 @@ class UserController extends Controller
         $allow = ['page', 'per_page', 'sortby', 'sort', 'name'];
         $info = $request->only($allow);
         $need = ['stu_code'];
-        $user = (new UserData())->getUserInfo(['user_id', $request->get('user_id')], $need);
+        $user = (new UserData())->getUserInfo(['user_id' => $request->get('user_id')], $need);
 
         //有关参数初始化
         $info['per_page'] = $info['per_page'] ? : 10;
