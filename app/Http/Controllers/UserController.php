@@ -214,7 +214,7 @@ class UserController extends Controller
         $need = ['activity_key', 'act_name', 'current_step', 'status', 'score', 'evaluation', 'created_at'];
 
         $data_m = new ApplyData();
-        if (!$data = $data_m->getApplyDataList($info, $need))
+        if (!$data = $data_m->getApplyDataHistory($info, $need))
             return response()->json([
                 'status' => 0,
                 'message' => '申请历史获取失败'

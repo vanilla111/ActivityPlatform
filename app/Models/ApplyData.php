@@ -13,7 +13,7 @@ class ApplyData extends Model
     protected $primaryKey = 'enroll_id';
 
     public $fillable = ['user_id', 'activity_key', 'current_step', 'full_name', 'stu_code', 'act_name',
-        'gender', 'grade', 'contact', 'college', 'score', 'evaluation', 'act_author'];
+        'gender', 'grade', 'contact', 'college', 'score', 'evaluation', 'act_author', 'status'];
 
     public function belongsToAct()
     {
