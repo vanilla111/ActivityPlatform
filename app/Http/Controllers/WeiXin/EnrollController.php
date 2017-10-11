@@ -88,7 +88,7 @@ class EnrollController extends Controller
         $user = UserData::updateOrCreate($attributes, $values);
 
         //unset($values['password']);
-        $request->session()->put('user', $user['user_id']);
+        $request->session()->set('user', $user['user_id']);
         $request->session()->save();
 
         return response()->json([

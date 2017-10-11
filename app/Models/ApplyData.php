@@ -37,6 +37,17 @@ class ApplyData extends Model
         return $sql->select($need)->paginate($info['per_page']);
     }
 
+    public function getApplyDataHistory($info, $need)
+    {
+        $res = $this->where('status', '>', 0);
+        if (isset($info['stu_code']))
+            $res = $res->where('stu_code', $info['stu_code']);
+        if (isset($info['user_id']))
+            $res = $res->where('user_id', $info['user_id']);
+
+        return $res->select($need)->orderBy($info['sortby'], $info['sort'])->paginate($info['per_page']);
+    }
+
     public function getApplyDataForExcel($info, $need)
     {
         $condition = $this->conditionBuilder($info);
