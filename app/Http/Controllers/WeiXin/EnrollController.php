@@ -225,7 +225,7 @@ class EnrollController extends Controller
                     'activity_key' => $value,
                     'user_id' => $user_id
                 ];
-                if (!ApplyData::where($condition)->update($apply_data)) {
+                if (!ApplyData::where($condition)->update($update_data)) {
                     DB::rollBack();
                     return response()->json([
                         'status' => 0,
