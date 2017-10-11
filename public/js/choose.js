@@ -19,7 +19,7 @@ var now = new Date();
 var startTime = new Date('2017/10/10 03:00:00');
 
 if (/ref=.*joinus/.test(query) || sessionStorage.getItem('joinus') || now < startTime) {
-    sessionStorage.setItem('joinus', true);
+    sessionStorage.setItem('joíinus', true);
     document.title = '红岩网校工作站招新啦';
 
     ajax({
@@ -205,7 +205,7 @@ $('.sure').addEventListener('click', function () {
             type: 'form',
             data: 'act_key=' + department + '&contact=' + phone,
             success: function success(res) {
-                window.alert(res.message);
+                window.alert('报名成功');
                 postInfo = true;
                 department.length = 0;
             },
