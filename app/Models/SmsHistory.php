@@ -13,12 +13,13 @@ class SmsHistory extends Model
 
     public function getHistoryList($condition, $need, $page)
     {
+        $res = $this;
         if (!isset($condition['code']) || $condition['code'] == 0)
-            $this->where($condition);
+            $res = $this->where($condition);
         else
-            $this->where('who_send', $condition['who_send'])
+            $res->where('who_send', $condition['who_send'])
                 ->where('code', '>', 0);
 
-        return $this->select($need)->orderBy('created_at', 'desc')->paginate($page['per_page']);
+        return $res->select($need)->orderBy('created_at', 'desc')->paginate($page['per_page']);
     }
 }
