@@ -191,7 +191,8 @@ class EnrollController extends Controller
             'college' => $user_info['college'],
             'contact' => $user_info['contact'],
             'stu_code' => $user_info['stu_code'],
-            'grade' => $user_info['grade']
+            'grade' => $user_info['grade'],
+            'status' => 1
         ];
 
         foreach ($act_key as $value) {
