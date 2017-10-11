@@ -25,6 +25,34 @@ class EnrollController extends Controller
 
     private $bindStuInfoUrl = "https://wx.idsbllp.cn/MagicLoop/index.php?s=/addon/Bind/Bind/bind/openid/{openid}/token/gh_68f0a1ffc303";
 
+    public function fixEnrollInfo(Request $request)
+    {
+//        $update_data = [
+//            'act_name' => 'test',
+//            'current_step' => 22
+//        ];
+//        return ApplyData::where(['activity_key' => 1000])->update($update_data);
+        $start_act = 1023;
+        $end_act = 1061;
+        for ($i = $start_act; $i <= $end_act; $i++) {
+            if ($i == 1037 || $i == 1038 || $i == 1039){
+                continue;
+            }
+            $act = ActDesign::find($i);
+            if (empty($act))
+                continue;
+            $condition = [
+                'activity_key' => $act->activity_id
+            ];
+            $update_data = [
+                'act_name' => $act->activity_name,
+                'current_step' => $act->enroll_flow,
+            ];
+            ApplyData::where($condition)->update($update_data);
+        }
+        return 'success';
+    }
+
     public function getUserInfo(Request $request)
     {
         $user_info = $request->session()->get("weixin.user");
