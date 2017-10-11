@@ -21,10 +21,12 @@
                             <p class="select-part">红岩网校工作站</p>
                             <p class="select-part">校学生会</p>
                             <p class="select-part">科技联合会</p>
-                            <p class="select-part">校团委各部室</p>
                             <p class="select-part">青年志愿者协会</p>
                             <p class="select-part">社团联合会</p>
                             <p class="select-part">大学生艺术团</p>
+                            <p class="select-part">团委办公室</p>
+                            <p class="select-part">团委组织部</p>
+                            <p class="select-part">团委宣传部</p>
                         </div>
                     </div>
                     <div class="select select-two" rank="100">
@@ -41,10 +43,12 @@
                             <p class="select-part">红岩网校工作站</p>
                             <p class="select-part">校学生会</p>
                             <p class="select-part">科技联合会</p>
-                            <p class="select-part">校团委各部室</p>
                             <p class="select-part">青年志愿者协会</p>
                             <p class="select-part">社团联合会</p>
                             <p class="select-part">大学生艺术团</p>
+                            <p class="select-part">团委办公室</p>
+                            <p class="select-part">团委组织部</p>
+                            <p class="select-part">团委宣传部</p>
                         </div>
                     </div>
                     <div class="select select-two" rank="101">
