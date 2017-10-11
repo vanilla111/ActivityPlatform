@@ -128,6 +128,7 @@ class EnrollController extends Controller
         $act_m = new ActDesign();
         $flag = 1;
         $error_mes = [];
+        $act_info = [];
         foreach ($act_key as $value) {
             $condition = [
                 'activity_id' => $value
@@ -156,7 +157,7 @@ class EnrollController extends Controller
                     array_push($error_mes[$act['activity_name']], '该活动报名人数已达到上限');
                 }
 
-                $act_info[$value] = [$act['activity_name'], $act['enroll_flow']];
+                $act_info[$value] = array($act['activity_name'], $act['enroll_flow']);
             }
         }
 
@@ -176,7 +177,7 @@ class EnrollController extends Controller
                 'user_id' => $user_id
             ];
             if ($data_m->applyDataExists($condition)) {
-                $already_enroll[$i] = $act_key[$key];
+                $already_enroll[$i] = $value;
                 unset($act_key[$key]);
                 $i++;
             }
@@ -217,9 +218,9 @@ class EnrollController extends Controller
             }
         }
 
-        if (!empty($already_enroll))
-            foreach ($already_enroll as $value ) {
-                $apply_data['activity_key'] = $value;
+        if (!empty($already_enroll)) {
+            $update_data['contact'] = $apply_data['contact'];
+            foreach ($already_enroll as $value) {
                 $condition = [
                     'activity_key' => $value,
                     'user_id' => $user_id
@@ -232,6 +233,7 @@ class EnrollController extends Controller
                     ], 403);
                 }
             }
+        }
         DB::commit();
 
         return response()->json([
