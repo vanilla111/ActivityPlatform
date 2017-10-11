@@ -213,10 +213,10 @@ $('.sure').addEventListener('click', function () {
                     btn : ['报名历史', '确定'],
                     yes : function (index, layero) {
                         var message = '';
-                        var userId = JSON.parse(sessionStorage.getItem('userInfo')).stu_info.user_id;
+                        var stuCode = JSON.parse(sessionStorage.getItem('userInfo')).stu_info.stu_code;
                         ajax({
                             method: 'get',
-                            url: serverUrl + '/api/user/applydata?' + 'user_id=' + userId,
+                            url: serverUrl + '/api/user/applydata?page=1&' + 'stu_code=' + stuCode,
                             success:function success(res) {
                                 jQuery.each(res.data.data, function (key, value) {
                                    message += value.act_name + '&nbsp' + value.created_at + "<br>";
