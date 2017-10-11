@@ -41,7 +41,7 @@ Route::get('/test', 'BaseController@Test');
         Route::post('enroll', 'WeiXin\EnrollController@enroll');
     });
 
-Route::get('fixEnrollInfo', 'WeiXin\EnrollController@fixEnrollInfo');
+    //Route::get('fixEnrollInfo', 'WeiXin\EnrollController@fixEnrollInfo');
     Route::group(['middleware' => ['client.change'], 'prefix' => 'api'], function () {
         //超级管理员
         Route::post('admin/smscharge', 'Admin\OrgController@chargeSms');
