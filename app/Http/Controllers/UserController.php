@@ -194,14 +194,22 @@ class UserController extends Controller
         //
         $allow = ['page', 'per_page', 'sortby', 'sort', 'name'];
         $info = $request->only($allow);
+        $user_id = $request->get('user_id');
+        $stu_code = $request->get('stu_code');
         $need = ['stu_code'];
-        $user = (new UserData())->getUserInfo(['user_id' => $request->get('user_id')], $need);
+        if (!empty($user_id)) {
+            $user = (new UserData())->getUserInfo(['user_id' => $user_id], $need);
+            $info['user_id'] = $user['user_id'];
+        }
+        else {
+            $user = (new UserData())->getUserInfo(['stu_code' => $stu_code], $need);
+            $info['stu_code'] = $user['stu_code'];
+        }
 
         //有关参数初始化
         $info['per_page'] = $info['per_page'] ? : 10;
         $info['sortby']   = $info['sortby'] ? : 'created_at';
         $info['sort']     = $info['sort'] ? : 'desc';
-        $info['sut_code']  = $user->stu_code;
 
         $need = ['activity_key', 'act_name', 'current_step', 'status', 'score', 'evaluation', 'created_at'];
 

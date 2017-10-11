@@ -151,7 +151,7 @@ class ApplyData extends Model
         if (isset($info['name']))
             $condition['vague']['full_name'] = $info['name'];
         if (isset($info['stu_code']))
-            $condition['vague']['stu_code'] = $info['stu_code'];
+            $condition['eq']['stu_code'] = $info['stu_code'];
         if (isset($info['college']))
             $condition['vague']['college'] = $info['college'];
 
