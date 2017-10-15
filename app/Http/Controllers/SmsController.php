@@ -184,6 +184,8 @@ class SmsController extends Controller
                     'request_id' => $result['request_id'],
                     'msg' => $result_arr['result']['msg'],
                     'model' => $result_arr['result']['model'],
+                    'contact' => $rec_num,
+                    'content' => $content,
                     'other_info' => "用户模版自行测试数据"
                 ];
                 $sms_num->decrement('sms_num', $num);
@@ -201,6 +203,8 @@ class SmsController extends Controller
                 'sub_code' => $result['sub_code'],
                 'sub_msg' => $result['sub_msg'],
                 'request_id' => $result['request_id'],
+                'contact' => $rec_num,
+                'content' => $content,
                 'other_info' => "用户模版自行测试数据"
             ];
             SmsHistory::create($history);
