@@ -418,7 +418,7 @@ class ApplyDataController extends Controller
         $sms_id = $admin_temp['sms_id'];
         $sms_free_sign_name = $admin_temp['sms_free_sign_name'];
         $vars = [];
-        return $static_var;
+        //return $static_var;
         foreach ($apply_data_arr as $key => $value) {
             if (!empty($dynamic_var))
                 foreach ($dynamic_var as $k => $v) {

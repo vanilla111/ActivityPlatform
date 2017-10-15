@@ -30,7 +30,7 @@ class SendSmsVariables
             }
             $request->attributes->add(compact('dynamic_var'));
         } else {
-            $static_var = serialize($sms['variables']);
+            $static_var = $sms['variables'];
         }
 
         $request->attributes->add(compact('static_var'));
